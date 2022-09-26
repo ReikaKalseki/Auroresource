@@ -24,7 +24,7 @@ namespace ReikaKalseki.Auroresource {
 	    public static void onAuroraSpawn(CrashedShipExploder ex) {
 	    	Sealed s = ex.gameObject.EnsureComponent<Sealed>();
 	    	s._sealed = true;
-	    	s.maxOpenedAmount = 250/AuroresourceMod.config.getFloat(FOConfig.ConfigEntries.SPEED); //was 150, comparedto vanilla 100
+	    	s.maxOpenedAmount = 250/AuroresourceMod.config.getFloat(ARConfig.ConfigEntries.SPEED); //was 150, comparedto vanilla 100
 	    	s.openedEvent.AddHandler(ex.gameObject, new UWE.Event<Sealed>.HandleFunction(se => {
 	    		se.openedAmount = 0;
 	    		se._sealed = true;

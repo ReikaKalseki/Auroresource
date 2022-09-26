@@ -16,7 +16,7 @@ namespace ReikaKalseki.Auroresource {
 	
 	public class DrillableMeteorite : Spawnable {
 		
-		public static readonly float DURATION = 200*AuroresourceMod.config.getFloat(FOConfig.ConfigEntries.SPEED);
+		public static readonly float DURATION = 200*AuroresourceMod.config.getFloat(ARConfig.ConfigEntries.SPEED);
 		
 		public readonly WeightedRandom<TechType> drops = new WeightedRandom<TechType>();
 		
