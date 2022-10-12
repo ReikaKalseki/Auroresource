@@ -51,5 +51,11 @@ namespace ReikaKalseki.Auroresource {
 	    		return AuroresourceMod.dunesMeteor.getRandomResource();
 	    	return d.ChooseRandomResource();
 	    }
+		
+		public static void onBreakableResourceSpawn(BreakableResource src) {
+			if (src.gameObject.GetComponent<ReefbackPlant>()) {
+				src.numChances = 4;
+			}
+		}
 	}
 }
