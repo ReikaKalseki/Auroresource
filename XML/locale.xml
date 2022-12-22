@@ -1,0 +1,19 @@
+<Root>
+	<meteorite>
+		<name>
+			Meteorite
+		</name>
+		<desc>
+			A large chunk of rock and metal originating from space. Rich in minerals.
+		</desc>
+		<pda>
+			meteorite
+		</pda>
+		<tooltip>
+			Metal-rich Meteorite
+		</tooltip>
+		<tooltipSecondary>
+			Source of many mineral varieties.
+		</tooltipSecondary>
+	</meteorite>
+</Root>

@@ -24,6 +24,7 @@ namespace ReikaKalseki.Auroresource
     
     public static readonly Config<ARConfig.ConfigEntries> config = new Config<ARConfig.ConfigEntries>();
     
+    public static readonly XMLLocale locale = new XMLLocale("XML/locale.xml");
     public static readonly XMLLocale pdaLocale = new XMLLocale("XML/pda.xml");
     
     public static DrillableMeteorite dunesMeteor;
@@ -47,6 +48,7 @@ namespace ReikaKalseki.Auroresource
 			FileLog.Log(ex.ToString());
         }
         
+        locale.load();
         pdaLocale.load();
         
         addPDAEntries();
@@ -57,6 +59,7 @@ namespace ReikaKalseki.Auroresource
 	    PDAMessagePrompts.instance.addPDAMessage("auroracut", "The Aurora is the property of the Alterra Corporation. Do not attempt salvage of the Aurora's materials.", "Sounds/auroracutwarn.ogg");
         
         GenUtil.registerWorldgen(new PositionedPrefab(dunesMeteor.ClassID, new Vector3(-1125, -409, 1130)));
+        GenUtil.registerWorldgen(new PositionedPrefab(lavaPit.ClassID, new Vector3(-273, -1355-40, -152)));
         GenUtil.registerWorldgen(new PositionedPrefab(VanillaCreatures.REAPER.prefab, new Vector3(-1125, -209, 1130)));
         
         System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(ARHooks).TypeHandle);

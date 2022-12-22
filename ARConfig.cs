@@ -11,7 +11,7 @@ namespace ReikaKalseki.Auroresource
 	public class ARConfig
 	{		
 		public enum ConfigEntries {
-			[ConfigEntry("Harvesting Speed", typeof(float), 1F, 0.1F, 10, 0)]SPEED,
+			[ConfigEntry("Motherlode Harvesting Speed", typeof(float), 1F, 0.1F, 10, 0)]SPEED,
 		}
 	}
 }

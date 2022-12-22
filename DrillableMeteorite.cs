@@ -14,86 +14,23 @@ using SMLHelper.V2.Assets;
 
 namespace ReikaKalseki.Auroresource {
 	
-	public class DrillableMeteorite : Spawnable {
+	public class DrillableMeteorite : DrillableResourceArea {
 		
 		public static readonly float DURATION = 200*AuroresourceMod.config.getFloat(ARConfig.ConfigEntries.SPEED);
 		
 		public readonly WeightedRandom<TechType> drops = new WeightedRandom<TechType>();
 		
-		public DrillableMeteorite() : base("DrillableMeteorite", "Meteorite", "A large chunk of rock and metal originating from space. Rich in minerals.") {
-			drops.addEntry(TechType.Titanium, 400);
-			drops.addEntry(TechType.Quartz, 300);
-			drops.addEntry(TechType.Copper, 250);
-			drops.addEntry(TechType.Nickel, 180);
-			drops.addEntry(TechType.Lead, 180);
-			drops.addEntry(TechType.Silver, 150);
-			drops.addEntry(TechType.Gold, 100);
-			drops.addEntry(TechType.MercuryOre, 40);
-			drops.addEntry(TechType.UraniniteCrystal, 60);
-			//drops.addEntry(TechType.Diamond, 25);
-		}
-		
-		public void register() {
-			Patch();
-			SNUtil.addPDAEntry(this, 20, PDAManager.getPage("meteorite"));
-		}
-		
-		public GameObject getRandomResource() {
-			return CraftData.GetPrefabForTechType(drops.getRandomEntry(), true);
-		}
-			
-	    public override GameObject GetGameObject() {
-			GameObject world = ObjectUtil.createWorldObject(VanillaResources.LARGE_QUARTZ.prefab, true, false);
-			if (world != null) {
-				world.SetActive(false);
-				world.EnsureComponent<TechTag>().type = TechType;
-				world.EnsureComponent<PrefabIdentifier>().ClassId = ClassID;
-				MeshRenderer[] r = world.GetComponentsInChildren<MeshRenderer>();
-				for (int i = 1; i < r.Length; i++) {
-					UnityEngine.Object.DestroyImmediate(r[i].gameObject);
-				}
-				SphereCollider sc = r[0].gameObject.EnsureComponent<SphereCollider>();
-				sc.radius = 20F;
-				sc.center = Vector3.zero;
-				world.EnsureComponent<Meteorite>();
-				Drillable dr = world.EnsureComponent<Drillable>();
-				dr.Start();
-				dr.primaryTooltip = "Metal-rich Meteorite";
-				dr.secondaryTooltip = "Source of many mineral varieties.";
-				dr.minResourcesToSpawn = 1;
-				dr.maxResourcesToSpawn = 1;
-				dr.deleteWhenDrilled = false;
-				dr.kChanceToSpawnResources = 1;
-				world.SetActive(true);
-				dr.onDrilled += (d) => {
-					//SNUtil.writeToChat("Finished drilling "+d.health.Length+"|"+string.Join(",", d.health));
-					d.health[0] = DURATION;
-					d.GetComponentsInChildren<MeshRenderer>(true)[0].gameObject.SetActive(true);
-				};
-				return world;
-			}
-			else {
-				SNUtil.writeToChat("Could not fetch template GO for "+this);
-				return null;
-			}
-	    }
-		
-		class Meteorite : MonoBehaviour {
-			
-			private Drillable drill;
-			private GameObject innerObject;
-			
-			void Update() {
-				if (!drill || !innerObject) {
-					drill = gameObject.GetComponent<Drillable>();
-					innerObject = drill.GetComponentsInChildren<MeshRenderer>(true)[0].gameObject;
-				}
-				if (drill.health[0] <= 0 || !innerObject.activeSelf) {
-					drill.health[0] = DURATION;
-					innerObject.SetActive(true);
-				}
-			}
-			
+		public DrillableMeteorite() : base(AuroresourceMod.locale.getEntry("meteorite")) {
+			addDrop(TechType.Titanium, 400);
+			addDrop(TechType.Quartz, 300);
+			addDrop(TechType.Copper, 250);
+			addDrop(TechType.Nickel, 180);
+			addDrop(TechType.Lead, 180);
+			addDrop(TechType.Silver, 150);
+			addDrop(TechType.Gold, 100);
+			addDrop(TechType.MercuryOre, 40);
+			addDrop(TechType.UraniniteCrystal, 60);
+			//addDrop(TechType.Diamond, 25);
 		}
 			
 	}
