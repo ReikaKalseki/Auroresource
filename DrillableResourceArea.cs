@@ -18,11 +18,17 @@ namespace ReikaKalseki.Auroresource {
 		
 		public static readonly float DURATION = 200*AuroresourceMod.config.getFloat(ARConfig.ConfigEntries.SPEED);
 		
+		private static readonly Dictionary<string, DrillableResourceArea> NODES = new Dictionary<string, DrillableResourceArea>();
+		
 		private readonly WeightedRandom<TechType> drops = new WeightedRandom<TechType>();
 		public readonly XMLLocale.LocaleEntry locale;
 		public readonly float radius;
 		
 		//public float harvestSpeedMultiplier = 1;
+		
+		public static DrillableResourceArea getResourceNode(string id) {
+			return NODES.ContainsKey(id) ? NODES[id] : null;
+		}
 		
 		protected DrillableResourceArea(XMLLocale.LocaleEntry e, float r) : base(e.key, e.name, e.desc) {
 			locale = e;
@@ -34,9 +40,18 @@ namespace ReikaKalseki.Auroresource {
 			return this;
 		}
 		
-		public void register() {
+		public void register(int scanTime = 20) {
 			Patch();
-			SNUtil.addPDAEntry(this, 20, PDAManager.getPage(locale.pda));
+			SNUtil.addPDAEntry(this, scanTime, PDAManager.getPage(locale.pda));
+			NODES[ClassID] = this;
+		}
+		
+		public void updateLocale() {
+			PDAManager.PDAPage page = PDAManager.getPage(locale.pda);
+			page.append("\n\nPossible Materials:\n");
+			foreach (TechType tt in drops.getValues()) {
+				page.append(Language.main.strings[tt.AsString(false)]+": "+(drops.getProbability(tt)*100).ToString("0.0")+"%\n");
+			}
 		}
 		
 		public GameObject getRandomResource() {

@@ -47,8 +47,12 @@ namespace ReikaKalseki.Auroresource {
 	    
 	    public static GameObject getDrillableDrop(Drillable d) {
 	    	PrefabIdentifier pi = d.gameObject.GetComponent<PrefabIdentifier>();
-	    	if (pi && pi.ClassId == AuroresourceMod.dunesMeteor.ClassID)
-	    		return AuroresourceMod.dunesMeteor.getRandomResource();
+	    	if (pi) {
+	    		DrillableResourceArea di = DrillableResourceArea.getResourceNode(pi.ClassId);
+	    		if (di != null) {
+	    			return di.getRandomResource();
+	    		}
+	    	}
 	    	return d.ChooseRandomResource();
 	    }
 		

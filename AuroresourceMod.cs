@@ -57,15 +57,21 @@ namespace ReikaKalseki.Auroresource
 	    dunesMeteor = new DrillableMeteorite();
 	    dunesMeteor.register();
 	    lavaPitCenter = new LavaDome();
-	    lavaPitCenter.register();
+	    lavaPitCenter.register(10);
 	    
 	    PDAMessagePrompts.instance.addPDAMessage("auroracut", "The Aurora is the property of the Alterra Corporation. Do not attempt salvage of the Aurora's materials.", "Sounds/auroracutwarn.ogg");
         
         GenUtil.registerWorldgen(new PositionedPrefab(dunesMeteor.ClassID, new Vector3(-1125, -409, 1130)));
-        GenUtil.registerWorldgen(new PositionedPrefab(lavaPitCenter.ClassID, new Vector3(-273, -1355-40, -152)));
+        GenUtil.registerWorldgen(new PositionedPrefab(lavaPitCenter.ClassID, new Vector3(-273, -1355-56, -152)));
         GenUtil.registerWorldgen(new PositionedPrefab(VanillaCreatures.REAPER.prefab, new Vector3(-1125, -209, 1130)));
         
         System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(ARHooks).TypeHandle);
+        
+        DIHooks.onWorldLoadedEvent += () => {
+        	SNUtil.log("Adding resource data to motherlode PDA pages.", modDLL);
+        	dunesMeteor.updateLocale();
+        	lavaPitCenter.updateLocale();
+        };
     }
     
     [QModPostPatch]

@@ -16,11 +16,12 @@ namespace ReikaKalseki.Auroresource {
 	
 	public class LavaDome : DrillableResourceArea {
 		
-		public LavaDome() : base(AuroresourceMod.locale.getEntry("DrillableLavaDome"), 40) {
+		public LavaDome() : base(AuroresourceMod.locale.getEntry("DrillableLavaDome"), 60) {
 			addDrop(TechType.Quartz, 200);
-			addDrop(TechType.Magnetite, 100);
-			addDrop(TechType.UraniniteCrystal, 60);
-			addDrop(TechType.Diamond, 40);
+			addDrop(TechType.AluminumOxide, 120);
+			addDrop(TechType.Diamond, 80);
+			addDrop(TechType.Magnetite, 50);
+			addDrop(TechType.UraniniteCrystal, 30);
 			addDrop(TechType.Kyanite, 10);
 		}
 			
