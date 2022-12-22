@@ -1,5 +1,5 @@
 <Root>
-	<meteorite>
+	<DrillableMeteorite>
 		<name>
 			Meteorite
 		</name>
@@ -15,5 +15,22 @@
 		<tooltipSecondary>
 			Source of many mineral varieties.
 		</tooltipSecondary>
-	</meteorite>
+	</DrillableMeteorite>
+	<DrillableLavaDome>
+		<name>
+			Lava Dome
+		</name>
+		<desc>
+			A large upwelling of semisolid magma from deep underground. Contains crystalline materials.
+		</desc>
+		<pda>
+			lavadome
+		</pda>
+		<tooltip>
+			Lava Dome
+		</tooltip>
+		<tooltipSecondary>
+			Contains crystalline materials.
+		</tooltipSecondary>
+	</DrillableLavaDome>
 </Root>

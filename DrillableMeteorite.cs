@@ -16,21 +16,14 @@ namespace ReikaKalseki.Auroresource {
 	
 	public class DrillableMeteorite : DrillableResourceArea {
 		
-		public static readonly float DURATION = 200*AuroresourceMod.config.getFloat(ARConfig.ConfigEntries.SPEED);
-		
-		public readonly WeightedRandom<TechType> drops = new WeightedRandom<TechType>();
-		
-		public DrillableMeteorite() : base(AuroresourceMod.locale.getEntry("meteorite")) {
+		public DrillableMeteorite() : base(AuroresourceMod.locale.getEntry("DrillableMeteorite"), 20) {
 			addDrop(TechType.Titanium, 400);
-			addDrop(TechType.Quartz, 300);
 			addDrop(TechType.Copper, 250);
 			addDrop(TechType.Nickel, 180);
 			addDrop(TechType.Lead, 180);
 			addDrop(TechType.Silver, 150);
 			addDrop(TechType.Gold, 100);
 			addDrop(TechType.MercuryOre, 40);
-			addDrop(TechType.UraniniteCrystal, 60);
-			//addDrop(TechType.Diamond, 25);
 		}
 			
 	}

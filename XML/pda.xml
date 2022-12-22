@@ -15,4 +15,20 @@
 		MeteorImage
 	</header>
   </meteorite>
+  <lavadome>
+	<name>
+		Lava Dome
+	</name>
+	<pda>
+		A large upwelling of semisolid magma from deep underground. While the material is dangerously hot, the differential cooling rates of the constituent minerals in the magma frequently results in the accumulation of crystalline deposits of various materials. Due to the volcanic activity in this region, these materials are being continuously replenished, and as such this resource supply cannot be depleted.
+		
+		Analysis: Likely renewable supply of various crystalline materials
+	</pda>
+	<category>
+		PlanetaryGeology
+	</category>
+	<header>
+		DomeImage
+	</header>
+  </lavadome>
 </Root>

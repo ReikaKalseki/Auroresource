@@ -20,12 +20,16 @@ namespace ReikaKalseki.Auroresource {
 		
 		private readonly WeightedRandom<TechType> drops = new WeightedRandom<TechType>();
 		public readonly XMLLocale.LocaleEntry locale;
+		public readonly float radius;
 		
-		protected DrillableResourceArea(XMLLocale.LocaleEntry e) : base(e.key, e.name, e.desc) {
+		//public float harvestSpeedMultiplier = 1;
+		
+		protected DrillableResourceArea(XMLLocale.LocaleEntry e, float r) : base(e.key, e.name, e.desc) {
 			locale = e;
+			radius = r;
 		}
 		
-		protected DrillableResourceArea addDrop(TechType drop, double weight) {
+		internal DrillableResourceArea addDrop(TechType drop, double weight) {
 			drops.addEntry(drop, weight);
 			return this;
 		}
@@ -50,11 +54,12 @@ namespace ReikaKalseki.Auroresource {
 					UnityEngine.Object.DestroyImmediate(r[i].gameObject);
 				}
 				SphereCollider sc = r[0].gameObject.EnsureComponent<SphereCollider>();
-				sc.radius = 20F;
+				sc.radius = radius;
 				sc.center = Vector3.zero;
 				world.EnsureComponent<InfinitelyDrillable>();
 				Drillable dr = world.EnsureComponent<Drillable>();
 				dr.Start();
+				dr.health[0] = DURATION;//harvestSpeedMultiplier;
 				dr.primaryTooltip = locale.getField<string>("tooltip");
 				dr.secondaryTooltip = locale.getField<string>("tooltipSecondary");
 				dr.minResourcesToSpawn = 1;
@@ -64,7 +69,7 @@ namespace ReikaKalseki.Auroresource {
 				world.SetActive(true);
 				dr.onDrilled += (d) => {
 					//SNUtil.writeToChat("Finished drilling "+d.health.Length+"|"+string.Join(",", d.health));
-					d.health[0] = DURATION;
+					d.health[0] = DURATION;//harvestSpeedMultiplier;
 					d.GetComponentsInChildren<MeshRenderer>(true)[0].gameObject.SetActive(true);
 				};
 				return world;
@@ -86,7 +91,7 @@ namespace ReikaKalseki.Auroresource {
 					innerObject = drill.GetComponentsInChildren<MeshRenderer>(true)[0].gameObject;
 				}
 				if (drill.health[0] <= 0 || !innerObject.activeSelf) {
-					drill.health[0] = DURATION;
+					drill.health[0] = DURATION;//harvestSpeedMultiplier;
 					innerObject.SetActive(true);
 				}
 			}
