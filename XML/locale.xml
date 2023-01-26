@@ -33,4 +33,24 @@
 			Contains crystalline materials.
 		</tooltipSecondary>
 	</DrillableLavaDome>
+	<JailBreakConsole>
+		<name>
+			Precursor Modification Console
+		</name>
+		<desc>
+			
+		</desc>
+		<pda>
+			
+		</pda>
+		<tooltip>
+			Precursor Modification Console
+		</tooltip>
+		<tooltipSecondary>
+			Modify equipment
+		</tooltipSecondary>
+		<tooltipDisabled>
+			Not holding compatible equipment
+		</tooltipDisabled>
+	</JailBreakConsole>
 </Root>

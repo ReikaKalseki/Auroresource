@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Xml;
+using System.Text;
 using System.Reflection;
 
 using System.Collections.Generic;
@@ -18,31 +19,53 @@ namespace ReikaKalseki.Auroresource {
 	public static class ARHooks {
 	    
 	    static ARHooks() {
-			
+			DIHooks.itemTooltipEvent += generateItemTooltips;
 	    }
+		
+		public static void generateItemTooltips(StringBuilder sb, TechType tt, GameObject go) {
+			if (tt == TechType.LaserCutter && Story.StoryGoalManager.main.completedGoals.Contains(AuroresourceMod.laserCutterJailbroken.key)) {
+				TooltipFactory.WriteDescription(sb, "\nDevice firmware has been modified to circumvent proscribed usage limitations.");
+			}
+		}
 	    
 	    public static void onAuroraSpawn(CrashedShipExploder ex) {
 	    	Sealed s = ex.gameObject.EnsureComponent<Sealed>();
 	    	s._sealed = true;
 	    	s.maxOpenedAmount = 250/AuroresourceMod.config.getFloat(ARConfig.ConfigEntries.SPEED); //was 150, comparedto vanilla 100
 	    	s.openedEvent.AddHandler(ex.gameObject, new UWE.Event<Sealed>.HandleFunction(se => {
+				bool unlock = Story.StoryGoalManager.main.completedGoals.Contains(AuroresourceMod.laserCutterJailbroken.key);
 	    		se.openedAmount = 0;
 	    		se._sealed = true;
-	    		GameObject scrap = CraftData.GetPrefabForTechType(TechType.ScrapMetal);
-	    		scrap = UnityEngine.Object.Instantiate(scrap);
-	    		scrap.SetActive(false);
-	    		Inventory.main.ForcePickup(scrap.GetComponent<Pickupable>());
-	    		PDAMessagePrompts.instance.trigger("auroracut");
+	    		if (unlock) {
+		    		GameObject scrap = CraftData.GetPrefabForTechType(TechType.ScrapMetal);
+		    		scrap = UnityEngine.Object.Instantiate(scrap);
+		    		scrap.SetActive(false);
+		    		Inventory.main.ForcePickup(scrap.GetComponent<Pickupable>());
+		    		PDAMessagePrompts.instance.trigger("auroracut");
+	    		}
 	    		//SNUtil.log("Cycled aurora laser cut: "+s.openedAmount);
 	    	}));
 			GenericHandTarget ht = ex.gameObject.EnsureComponent<GenericHandTarget>();
 			ht.onHandHover = new HandTargetEvent();
 			ht.onHandHover.AddListener(hte => {
-				HandReticle.main.SetInteractText("AuroraLaserCut"); //is a locale key
-				HandReticle.main.SetProgress(s.GetSealedPercentNormalized());
-				HandReticle.main.SetIcon(HandReticle.IconType.Progress, 1f);
+				bool unlock = Story.StoryGoalManager.main.completedGoals.Contains(AuroresourceMod.laserCutterJailbroken.key);
+				Pickupable held = Inventory.main.GetHeld();
+	    		if (unlock) {
+					HandReticle.main.SetProgress(s.GetSealedPercentNormalized());
+					HandReticle.main.SetIcon(HandReticle.IconType.Progress, 1f);
+			   		HandReticle.main.SetInteractText("AuroraLaserCut"); //is a locale key
+			    }
+			    else if (held && held.GetTechType() == TechType.LaserCutter) {
+			    	HandReticle.main.SetIcon(HandReticle.IconType.HandDeny, 1f);
+			   		HandReticle.main.SetInteractText("AuroraLaserCutNeedsUnlock"); //is a locale key
+			    }
+			    else {
+			    	HandReticle.main.SetIcon(HandReticle.IconType.Default, 1f);
+			    	HandReticle.main.SetInteractText("");
+			    }
 			});
-			Language.main.strings["AuroraLaserCut"] = "Use Laser Cutter to harvest metal salvage";
+			Language.main.strings["AuroraLaserCut"] = "Use unlocked laser cutter to harvest metal salvage";
+			Language.main.strings["AuroraLaserCutNeedsUnlock"] = "Laser cutter firmware forbids dismantling Alterra property";
 	    }
 	    
 	    public static GameObject getDrillableDrop(Drillable d) {

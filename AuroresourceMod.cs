@@ -12,6 +12,8 @@ using SMLHelper.V2.Utility;
 using SMLHelper.V2.Crafting;
 using SMLHelper.V2.Assets;
 
+using Story;
+
 namespace ReikaKalseki.Auroresource
 {
   [QModCore]
@@ -26,9 +28,15 @@ namespace ReikaKalseki.Auroresource
     
     public static readonly XMLLocale locale = new XMLLocale("XML/locale.xml");
     public static readonly XMLLocale pdaLocale = new XMLLocale("XML/pda.xml");
+    public static readonly XMLLocale voLocale = new XMLLocale("XML/vo.xml");
+    
+    public static readonly Vector3 jailbreakPedestalLocation = new Vector3(420, -93.3F, 1153);
     
     public static DrillableMeteorite dunesMeteor;
     public static LavaDome lavaPitCenter;
+    public static PrecursorJailbreakingConsole console;
+    
+    public static StoryGoal laserCutterJailbroken;
 
     [QModPatch]
     public static void Load() {
@@ -51,6 +59,7 @@ namespace ReikaKalseki.Auroresource
         
         locale.load();
         pdaLocale.load();
+        voLocale.load();
         
         addPDAEntries();
 	    
@@ -58,8 +67,13 @@ namespace ReikaKalseki.Auroresource
 	    dunesMeteor.register();
 	    lavaPitCenter = new LavaDome();
 	    lavaPitCenter.register(10);
+	    console = new PrecursorJailbreakingConsole(locale.getEntry("JailBreakConsole"));
+	    console.register();
 	    
-	    PDAMessagePrompts.instance.addPDAMessage("auroracut", "The Aurora is the property of the Alterra Corporation. Do not attempt salvage of the Aurora's materials.", "Sounds/auroracutwarn.ogg");
+	    laserCutterJailbroken = new StoryGoal("lasercutterjailbreak", Story.GoalType.Story, 0f);
+	    
+	    PDAMessagePrompts.instance.addPDAMessage(voLocale.getEntry("auroracut"));
+        PDAMessagePrompts.instance.addPDAMessage(voLocale.getEntry("jailbreak"));
         
         GenUtil.registerWorldgen(new PositionedPrefab(dunesMeteor.ClassID, new Vector3(-1125, -409, 1130)));
         GenUtil.registerWorldgen(new PositionedPrefab(lavaPitCenter.ClassID, new Vector3(-273, -1355-56, -152)));
@@ -72,6 +86,8 @@ namespace ReikaKalseki.Auroresource
         	dunesMeteor.updateLocale();
         	lavaPitCenter.updateLocale();
         };
+        
+        StoryHandler.instance.addListener(s => {if (s == laserCutterJailbroken.key){PDAMessagePrompts.instance.trigger("jailbreak");}});
     }
     
     [QModPostPatch]
