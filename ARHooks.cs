@@ -37,10 +37,7 @@ namespace ReikaKalseki.Auroresource {
 	    		se.openedAmount = 0;
 	    		se._sealed = true;
 	    		if (unlock) {
-		    		GameObject scrap = CraftData.GetPrefabForTechType(TechType.ScrapMetal);
-		    		scrap = UnityEngine.Object.Instantiate(scrap);
-		    		scrap.SetActive(false);
-		    		Inventory.main.ForcePickup(scrap.GetComponent<Pickupable>());
+	    			InventoryUtil.addItem(TechType.ScrapMetal);
 		    		PDAMessagePrompts.instance.trigger("auroracut");
 	    		}
 	    		//SNUtil.log("Cycled aurora laser cut: "+s.openedAmount);
@@ -64,8 +61,8 @@ namespace ReikaKalseki.Auroresource {
 			    	HandReticle.main.SetInteractText("");
 			    }
 			});
-			Language.main.strings["AuroraLaserCut"] = "Use unlocked laser cutter to harvest metal salvage";
-			Language.main.strings["AuroraLaserCutNeedsUnlock"] = "Laser cutter firmware forbids dismantling Alterra property";
+			LanguageHandler.SetLanguageLine("AuroraLaserCut", "Use unlocked laser cutter to harvest metal salvage");
+			LanguageHandler.SetLanguageLine("AuroraLaserCutNeedsUnlock", "Laser cutter firmware forbids dismantling Alterra property");
 	    }
 	    
 	    public static GameObject getDrillableDrop(Drillable d) {

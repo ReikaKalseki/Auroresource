@@ -55,7 +55,7 @@ namespace ReikaKalseki.Auroresource {
 		}
 		
 		public GameObject getRandomResource() {
-			return CraftData.GetPrefabForTechType(drops.getRandomEntry(), true);
+			return ObjectUtil.lookupPrefab(drops.getRandomEntry());
 		}
 			
 	    public override sealed GameObject GetGameObject() {

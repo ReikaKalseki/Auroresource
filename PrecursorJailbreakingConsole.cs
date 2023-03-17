@@ -30,6 +30,7 @@ namespace ReikaKalseki.Auroresource {
 			sh.goal = AuroresourceMod.laserCutterJailbroken;
 			sh.primaryTooltip = locale.getField<string>("tooltip");
 			sh.secondaryTooltip = locale.getField<string>("tooltipSecondary");
+			sh.informGameObject = world;
 			sh.isValidHandTarget = false;
 			world.EnsureComponent<JailbreakingConsoleTag>();
 			foreach (Renderer r in world.GetComponent<PrecursorComputerTerminal>().fx.GetComponentsInChildren<Renderer>()) {
@@ -63,6 +64,10 @@ namespace ReikaKalseki.Auroresource {
 					terminal.enabled = target.enabled;
 					target.secondaryTooltip = target.enabled ? AuroresourceMod.console.locale.getField<string>("tooltipSecondary") : AuroresourceMod.console.locale.getField<string>("tooltipDisabled");
 				}
+			}
+			
+			void OnStoryHandTarget() {
+				SNUtil.triggerUnlockPopup(new SNUtil.PopupData("Laser Cutter Upgraded", "Firmware Unlocked"){controlText="Can now harvest directly from the Aurora's hull", graphic = () => SNUtil.getTechPopupSprite(TechType.LaserCutter)});
 			}
 			
 		}
