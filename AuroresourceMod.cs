@@ -57,6 +57,8 @@ namespace ReikaKalseki.Auroresource
 			FileLog.Log(ex.ToString());
         }
         
+        ModVersionCheck.getFromGitVsInstall("Auroresource", modDLL, "Auroresource").register();
+        
         locale.load();
         pdaLocale.load();
         voLocale.load();
