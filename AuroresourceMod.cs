@@ -24,11 +24,11 @@ namespace ReikaKalseki.Auroresource
     //public static readonly ModLogger logger = new ModLogger();
 	public static readonly Assembly modDLL = Assembly.GetExecutingAssembly();
     
-    public static readonly Config<ARConfig.ConfigEntries> config = new Config<ARConfig.ConfigEntries>();
+    public static readonly Config<ARConfig.ConfigEntries> config = new Config<ARConfig.ConfigEntries>(modDLL);
     
-    public static readonly XMLLocale locale = new XMLLocale("XML/locale.xml");
-    public static readonly XMLLocale pdaLocale = new XMLLocale("XML/pda.xml");
-    public static readonly XMLLocale voLocale = new XMLLocale("XML/vo.xml");
+    public static readonly XMLLocale locale = new XMLLocale(modDLL, "XML/locale.xml");
+    public static readonly XMLLocale pdaLocale = new XMLLocale(modDLL, "XML/pda.xml");
+    public static readonly XMLLocale voLocale = new XMLLocale(modDLL, "XML/vo.xml");
     
     public static readonly Vector3 jailbreakPedestalLocation = new Vector3(420, -93.3F, 1153);
     
@@ -58,6 +58,7 @@ namespace ReikaKalseki.Auroresource
         }
         
         ModVersionCheck.getFromGitVsInstall("Auroresource", modDLL, "Auroresource").register();
+        SNUtil.checkModHash(modDLL);
         
         locale.load();
         pdaLocale.load();

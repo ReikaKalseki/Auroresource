@@ -42,7 +42,7 @@ namespace ReikaKalseki.Auroresource {
 		
 		public void register(int scanTime = 20) {
 			Patch();
-			SNUtil.addPDAEntry(this, scanTime, PDAManager.getPage(locale.pda));
+			SNUtil.addScanUnlock(this, scanTime, PDAManager.getPage(locale.pda));
 			NODES[ClassID] = this;
 		}
 		
