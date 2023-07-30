@@ -16,7 +16,7 @@ namespace ReikaKalseki.Auroresource {
 	
 	public class DrillableMeteorite : DrillableResourceArea {
 		
-		public DrillableMeteorite() : base(AuroresourceMod.locale.getEntry("DrillableMeteorite"), 20) {
+		public DrillableMeteorite() : base(AuroresourceMod.locale.getEntry("DrillableMeteorite"), 24) {
 			addDrop(TechType.Titanium, 400);
 			addDrop(TechType.Copper, 250);
 			addDrop(TechType.Nickel, 180);

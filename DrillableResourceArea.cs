@@ -68,9 +68,11 @@ namespace ReikaKalseki.Auroresource {
 				for (int i = 1; i < r.Length; i++) {
 					UnityEngine.Object.DestroyImmediate(r[i].gameObject);
 				}
-				SphereCollider sc = r[0].gameObject.EnsureComponent<SphereCollider>();
+				ObjectUtil.removeComponent<Collider>(world);
+				SphereCollider sc = world.EnsureComponent<SphereCollider>();
 				sc.radius = radius;
 				sc.center = Vector3.zero;
+				sc.isTrigger = true;
 				world.EnsureComponent<InfinitelyDrillable>();
 				Drillable dr = world.EnsureComponent<Drillable>();
 				dr.Start();
@@ -81,6 +83,9 @@ namespace ReikaKalseki.Auroresource {
 				dr.maxResourcesToSpawn = 1;
 				dr.deleteWhenDrilled = false;
 				dr.kChanceToSpawnResources = 1;
+				world.layer = LayerID.Useable;
+				world.GetComponent<Rigidbody>().mass = 1000000;
+				//dr.resources = new Drillable.ResourceType[0]; //DO NOT DO - breaks prawn drill
 				world.SetActive(true);
 				dr.onDrilled += (d) => {
 					//SNUtil.writeToChat("Finished drilling "+d.health.Length+"|"+string.Join(",", d.health));
@@ -95,7 +100,7 @@ namespace ReikaKalseki.Auroresource {
 			}
 	    }
 		
-		class InfinitelyDrillable : MonoBehaviour {
+		class InfinitelyDrillable : SpecialDrillable {
 			
 			private Drillable drill;
 			private GameObject innerObject;
@@ -109,6 +114,14 @@ namespace ReikaKalseki.Auroresource {
 					drill.health[0] = DURATION;//harvestSpeedMultiplier;
 					innerObject.SetActive(true);
 				}
+			}
+			
+			public override bool allowAutomatedGrinding() {
+				return false;
+			}
+			
+			public override bool canBeMoved() {
+				return false;
 			}
 			
 		}
