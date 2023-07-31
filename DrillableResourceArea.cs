@@ -114,6 +114,7 @@ namespace ReikaKalseki.Auroresource {
 					drill.health[0] = DURATION;//harvestSpeedMultiplier;
 					innerObject.SetActive(true);
 				}
+				gameObject.layer = LayerID.Useable;
 			}
 			
 			public override bool allowAutomatedGrinding() {
