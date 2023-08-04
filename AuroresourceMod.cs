@@ -90,7 +90,10 @@ namespace ReikaKalseki.Auroresource
         	lavaPitCenter.updateLocale();
         };
         
-        StoryHandler.instance.addListener(s => {if (s == laserCutterJailbroken.key){PDAMessagePrompts.instance.trigger("jailbreak");}});
+        StoryHandler.instance.addListener(s => {
+        	if (s == laserCutterJailbroken.key)
+        		PDAMessagePrompts.instance.trigger("jailbreak");
+		});
     }
     
     [QModPostPatch]
