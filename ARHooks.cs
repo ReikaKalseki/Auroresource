@@ -19,12 +19,28 @@ namespace ReikaKalseki.Auroresource {
 	public static class ARHooks {
 	    
 	    static ARHooks() {
+	    	DIHooks.onPlayerTickEvent += tickPlayer;
 			DIHooks.itemTooltipEvent += generateItemTooltips;
+	    	DIHooks.onItemPickedUpEvent += onItemPickedUp;
 	    }
 		
 		public static void generateItemTooltips(StringBuilder sb, TechType tt, GameObject go) {
 			if (tt == TechType.LaserCutter && Story.StoryGoalManager.main.completedGoals.Contains(AuroresourceMod.laserCutterJailbroken.key)) {
 				TooltipFactory.WriteDescription(sb, "\nDevice firmware has been modified to circumvent proscribed usage limitations.");
+			}
+		}
+		
+	    public static void tickPlayer(Player ep) {	    
+			float time = DayNightCycle.main.timePassedAsFloat;		    	
+	    	float dT = Time.deltaTime;
+	    	FallingMaterialSystem.instance.tick(time, dT);
+		}
+		
+		public static void onItemPickedUp(Pickupable p) {
+			FallingMaterialTag tag = p.GetComponentInParent<FallingMaterialTag>();
+			if (tag) {
+				p.transform.SetParent(null);
+				UnityEngine.Object.Destroy(tag.gameObject);
 			}
 		}
 	    

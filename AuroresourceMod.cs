@@ -35,6 +35,7 @@ namespace ReikaKalseki.Auroresource
     public static DrillableMeteorite dunesMeteor;
     public static LavaDome lavaPitCenter;
     public static PrecursorJailbreakingConsole console;
+    public static FallingMaterial fallingMaterial;
     
     public static StoryGoal laserCutterJailbroken;
 
@@ -72,6 +73,8 @@ namespace ReikaKalseki.Auroresource
 	    lavaPitCenter.register(10);
 	    console = new PrecursorJailbreakingConsole(locale.getEntry("JailBreakConsole"));
 	    console.register();
+	    fallingMaterial = new FallingMaterial(locale.getEntry("FallingMaterial"));
+	    fallingMaterial.Patch();
 	    
 	    laserCutterJailbroken = new StoryGoal("lasercutterjailbreak", Story.GoalType.Story, 0f);
 	    
@@ -94,6 +97,10 @@ namespace ReikaKalseki.Auroresource
         	if (s == laserCutterJailbroken.key)
         		PDAMessagePrompts.instance.trigger("jailbreak");
 		});
+        
+        TechTypeMappingConfig<float>.loadInline("falling_materials", TechTypeMappingConfig<float>.FloatParser.instance, FallingMaterialSystem.instance.addMaterial);
+        
+        ConsoleCommandsHandler.Main.RegisterConsoleCommand<Action>("triggerFallingDebris", FallingMaterialSystem.instance.spawnItem);
     }
     
     [QModPostPatch]
