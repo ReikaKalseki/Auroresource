@@ -40,13 +40,24 @@ namespace ReikaKalseki.Auroresource {
 		}
 		
 		internal void tick(float time, float dT) {
+			if (items.isEmpty())
+				return;
 			if (nextReEntry <= 0) {
 				scheduleNextReEntry(time);
 			}
 			else if (time >= nextReEntry) {
-				spawnItem();
+				//spawnItem();
+				queueSpawn();
 				scheduleNextReEntry(time);
 			}
+		}
+		
+		internal void queueSpawn() {
+			if (items.isEmpty())
+				return;
+			GameObject go = ObjectUtil.createWorldObject(AuroresourceMod.fallingMaterialSpawner.ClassID);
+			go.transform.position = MathUtil.getRandomVectorAround(Vector3.zero, new Vector3(1500, 0, 1500)).setY(-2);
+			go.EnsureComponent<FallingMaterialSpawnerTag>().timeLeft = UnityEngine.Random.Range(5F, 15F)*60*AuroresourceMod.config.getFloat(ARConfig.ConfigEntries.REENTRY_WARNING);
 		}
 		
 		private void scheduleNextReEntry(float time) {
@@ -54,8 +65,14 @@ namespace ReikaKalseki.Auroresource {
 		}
 		
 		internal void spawnItem() {
-			GameObject go = AuroresourceMod.fallingMaterial.GetGameObject();
-			go.transform.position = MathUtil.getRandomVectorAround(Vector3.zero, new Vector3(500, 0, 500))+Vector3.up*UnityEngine.Random.Range(500F, 1500F);
+			spawnItem(MathUtil.getRandomVectorAround(Vector3.zero, new Vector3(1500, 0, 1500)));
+		}
+		
+		internal void spawnItem(Vector3 pos) {
+			if (items.isEmpty())
+				return;
+			GameObject go = ObjectUtil.createWorldObject(AuroresourceMod.fallingMaterial.ClassID);
+			go.transform.position = MathUtil.getRandomVectorAround(pos, new Vector3(100, 0, 100)).setY(UnityEngine.Random.Range(500F, 1500F));
 			foreach (ParticleSystem p in go.GetComponentsInChildren<ParticleSystem>())
 				p.Play();
 			GameObject item = ObjectUtil.createWorldObject(items.getRandomEntry());
@@ -68,7 +85,7 @@ namespace ReikaKalseki.Auroresource {
 	
 	public class FallingMaterial : Spawnable {
 		
-		internal FallingMaterial(XMLLocale.LocaleEntry e) : base(e.key, e.name, e.desc) {
+		internal FallingMaterial() : base("FallingMaterial", "", "") {
 			
 		}
 		
@@ -84,7 +101,32 @@ namespace ReikaKalseki.Auroresource {
 			go.EnsureComponent<TechTag>().type = TechType;
 			go.EnsureComponent<LargeWorldEntity>().cellLevel = LargeWorldEntity.CellLevel.Global;
 			go.EnsureComponent<FallingMaterialTag>();
-			//go.EnsureComponent<ResourceTracker>().techType = TechType;
+			return go;
+		}
+		
+	}
+	
+	public class FallingMaterialSpawner : Spawnable {
+		
+		internal FallingMaterialSpawner(XMLLocale.LocaleEntry e) : base(e.key, e.name, e.desc) {
+			OnFinishedPatching += () => {
+				SaveSystem.addSaveHandler(ClassID, new SaveSystem.ComponentFieldSaveHandler<FallingMaterialSpawnerTag>().addField("timeLeft"));
+			};
+		}
+		
+		public override GameObject GetGameObject() {
+			GameObject go = new GameObject("FallingMaterialSpawner(Clone)");
+			PrefabIdentifier pi = go.EnsureComponent<PrefabIdentifier>();
+			pi.classId = ClassID;
+			go.EnsureComponent<TechTag>().type = TechType;
+			go.EnsureComponent<LargeWorldEntity>().cellLevel = LargeWorldEntity.CellLevel.Global;
+			go.EnsureComponent<FallingMaterialSpawnerTag>();
+			ResourceTracker rt = go.EnsureComponent<ResourceTracker>();
+			rt.techType = TechType;
+			rt.overrideTechType = TechType;
+			rt.prefabIdentifier = pi;
+			rt.pickupable = null;
+			rt.rb = null;
 			return go;
 		}
 		
@@ -113,6 +155,21 @@ namespace ReikaKalseki.Auroresource {
 				transform.position = transform.position+velocity*dT;
 				transform.up = -velocity.normalized;
 				velocity += Vector3.down*dT*2;
+			}
+		}
+		
+	}
+	
+	class FallingMaterialSpawnerTag : MonoBehaviour {
+		
+		internal float timeLeft = -1;
+		
+		void Update() {
+			if (timeLeft >= 0) {
+				timeLeft -= Time.deltaTime;
+				if (timeLeft <= 0) {
+					FallingMaterialSystem.instance.spawnItem(transform.position);
+				}
 			}
 		}
 		

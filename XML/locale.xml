@@ -53,9 +53,9 @@
 			Not holding compatible equipment
 		</tooltipDisabled>
 	</JailBreakConsole>
-	<FallingMaterial>
+	<FallingMaterialSpawner>
 		<name>
-			Falling Material
+			Falling Material Predicted Approximate Impact Location
 		</name>
 		<desc>
 			
@@ -63,5 +63,16 @@
 		<pda>
 			
 		</pda>
-	</FallingMaterial>
+	</FallingMaterialSpawner>
+	<ScannerRoomMeteorPlanner>
+		<name>
+			Falling Material Detection Module
+		</name>
+		<desc>
+			Reprograms a scanner room's detection systems to track orbital debris and predict the time and approximate location of materials falling from space.
+		</desc>
+		<pda>
+			
+		</pda>
+	</ScannerRoomMeteorPlanner>
 </Root>
