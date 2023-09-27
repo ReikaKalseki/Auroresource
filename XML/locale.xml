@@ -55,14 +55,17 @@
 	</JailBreakConsole>
 	<FallingMaterialSpawner>
 		<name>
-			Falling Material Predicted Approximate Impact Location
+			Falling Material
 		</name>
 		<desc>
-			
+			Falling Material Predicted Approximate Impact Location
 		</desc>
 		<pda>
 			
 		</pda>
+		<timer>
+			Debris impact predicted in:
+		</timer>
 	</FallingMaterialSpawner>
 	<ScannerRoomMeteorPlanner>
 		<name>

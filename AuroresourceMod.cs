@@ -35,10 +35,7 @@ namespace ReikaKalseki.Auroresource
     public static DrillableMeteorite dunesMeteor;
     public static LavaDome lavaPitCenter;
     public static PrecursorJailbreakingConsole console;
-    
-    public static FallingMaterial fallingMaterial;
-    public static FallingMaterialSpawner fallingMaterialSpawner;
-    public static ScannerRoomMeteorPlanner meteorDetector;
+	public static ScannerRoomMeteorPlanner meteorDetector;
     
     public static StoryGoal laserCutterJailbroken;
 
@@ -76,14 +73,13 @@ namespace ReikaKalseki.Auroresource
 	    lavaPitCenter.register(10);
 	    console = new PrecursorJailbreakingConsole(locale.getEntry("JailBreakConsole"));
 	    console.register();
-	    fallingMaterial = new FallingMaterial();
-	    fallingMaterial.Patch();
-	    fallingMaterialSpawner = new FallingMaterialSpawner(locale.getEntry("FallingMaterialSpawner"));
-	    fallingMaterialSpawner.Patch();
-	    meteorDetector = new ScannerRoomMeteorPlanner();
-	    meteorDetector.Patch();
+	    
+		meteorDetector = new ScannerRoomMeteorPlanner();
+		meteorDetector.Patch();
 	    
 	    laserCutterJailbroken = new StoryGoal("lasercutterjailbreak", Story.GoalType.Story, 0f);
+	    
+	    FallingMaterialSystem.instance.register();
 	    
 	    PDAMessagePrompts.instance.addPDAMessage(voLocale.getEntry("auroracut"));
         PDAMessagePrompts.instance.addPDAMessage(voLocale.getEntry("jailbreak"));

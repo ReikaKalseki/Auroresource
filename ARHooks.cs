@@ -22,7 +22,8 @@ namespace ReikaKalseki.Auroresource {
 	    	DIHooks.onPlayerTickEvent += tickPlayer;
 			DIHooks.itemTooltipEvent += generateItemTooltips;
 	    	DIHooks.onItemPickedUpEvent += onItemPickedUp;
-	    	DIHooks.scannerRoomTechTypeListingEvent += (ch) => ch.canFind &= playerCanScanFor(ch.find, ch.gui);
+	    	DIHooks.scannerRoomTechTypeListingEvent += FallingMaterialSystem.instance.modifyScannableList;	    	
+	    	DIHooks.scannerRoomTickEvent += FallingMaterialSystem.instance.tickMapRoom;
 	    }
 		
 		public static void generateItemTooltips(StringBuilder sb, TechType tt, GameObject go) {
@@ -47,7 +48,7 @@ namespace ReikaKalseki.Auroresource {
 		
 		public static void onMapRoomSpawn(MapRoomFunctionality map) {
 			if (Array.IndexOf(map.allowedUpgrades, AuroresourceMod.meteorDetector.TechType) < 0)
-				typeof(MapRoomFunctionality).GetField("allowedUpgrades", BindingFlags.Instance | BindingFlags.Public).SetValue(map, map.allowedUpgrades.addToArray(AuroresourceMod.meteorDetector.TechType));
+				typeof(MapRoomFunctionality).GetField("allowedUpgrades", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(map, map.allowedUpgrades.addToArray(AuroresourceMod.meteorDetector.TechType));
 		}
 	    
 	    public static void onAuroraSpawn(CrashedShipExploder ex) {
@@ -102,17 +103,6 @@ namespace ReikaKalseki.Auroresource {
 			if (src.gameObject.GetComponent<ReefbackPlant>()) {
 				src.numChances = 4;
 			}
-		}
-	    
-	    private static bool playerCanScanFor(TechType find, uGUI_MapRoomScanner gui) {
-			if (find == AuroresourceMod.fallingMaterialSpawner.TechType)
-				return hasFinderUpgrade(gui);
-			else
-				return !hasFinderUpgrade(gui);
-		}
-		
-		private static bool hasFinderUpgrade(uGUI_MapRoomScanner gui) {
-			return gui.mapRoom.storageContainer.container.GetCount(AuroresourceMod.meteorDetector.TechType) > 0;
 		}
 	}
 }
