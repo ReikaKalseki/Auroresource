@@ -23,6 +23,15 @@ namespace ReikaKalseki.Auroresource {
 		private static readonly SoundManager.SoundData entrySound = SoundManager.registerSound(AuroresourceMod.modDLL, "debrisentry", "Sounds/debris-entry.ogg", SoundManager.soundMode3D, s => {SoundManager.setup3D(s, 9999);}, SoundSystem.masterBus);
 		internal static readonly SoundManager.SoundData splashSound = SoundManager.registerSound(AuroresourceMod.modDLL, "debrissplash", "Sounds/debris-splash.ogg", SoundManager.soundMode3D, s => {SoundManager.setup3D(s, 9999);}, SoundSystem.masterBus);
 		
+		private static readonly Vector3 auroraPoint1 = new Vector3(746, 0, -362);
+		private static readonly Vector3 auroraPoint2 = new Vector3(1295, 0, 110);
+		private static readonly float auroraPointRadius = 275;
+		private static readonly Vector3 mountainIslandPoint1 = new Vector3(360, 0, 1040);
+		private static readonly Vector3 mountainIslandPoint2 = new Vector3(347, 0, 909);
+		private static readonly float mountainIslandPointRadius = 80;
+		private static readonly Vector3 floatingIslandCenter = new Vector3(-747, 0, -1061);
+		private static readonly float floatingIslandRadius = 150;
+		
 		private readonly WeightedRandom<TechType> items = new WeightedRandom<TechType>();
     
 	    internal FallingMaterial fallingMaterial;
@@ -106,10 +115,28 @@ namespace ReikaKalseki.Auroresource {
 			if (currentSpawner)
 				return;
 			GameObject go = ObjectUtil.createWorldObject(fallingMaterialSpawner.ClassID);
-			go.transform.position = MathUtil.getRandomVectorAround(Vector3.zero, new Vector3(1500, 0, 1500)).setY(-2);
+			go.transform.position = selectRandomPosition();
 			currentSpawner = go.EnsureComponent<FallingMaterialSpawnerTag>();
 			currentSpawner.timeLeft = UnityEngine.Random.Range(5F, 15F)*60*AuroresourceMod.config.getFloat(ARConfig.ConfigEntries.REENTRY_WARNING);
 			countdown.setTime(currentSpawner.timeLeft);
+		}
+		
+		private Vector3 selectRandomPosition() {
+			Vector3 sel = MathUtil.getRandomVectorAround(Vector3.zero, new Vector3(1500, 0, 1500));
+			while (isCloseToExclusion(sel)) {
+				sel = MathUtil.getRandomVectorAround(Vector3.zero, new Vector3(1500, 0, 1500));
+			}
+			return sel.setY(-2);
+		}
+		
+		private bool isCloseToExclusion(Vector3 sel) {
+			if (Vector3.Distance(sel, floatingIslandCenter) <= floatingIslandRadius)
+				return true;
+			if (MathUtil.getDistanceToLineSegment(sel, mountainIslandPoint1, mountainIslandPoint2) <= mountainIslandPointRadius)
+				return true;
+			if (MathUtil.getDistanceToLineSegment(sel, auroraPoint1, auroraPoint2) <= auroraPointRadius)
+				return true;
+			return false;
 		}
 		
 		private void scheduleNextReEntry(float time) {

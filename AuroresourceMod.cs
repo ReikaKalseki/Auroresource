@@ -38,6 +38,8 @@ namespace ReikaKalseki.Auroresource
 	public static ScannerRoomMeteorPlanner meteorDetector;
     
     public static StoryGoal laserCutterJailbroken;
+    
+    public static TechType detectorUnlock = TechType.BaseMapRoom;
 
     [QModPatch]
     public static void Load() {
@@ -114,6 +116,9 @@ namespace ReikaKalseki.Auroresource
 			SNUtil.log("Found iridium ore. Adding to meteor drop list.");
 			dunesMeteor.addDrop(irid.TechType, 15);
 		}
+		
+		if (detectorUnlock != TechType.None)
+			TechnologyUnlockSystem.instance.addDirectUnlock(detectorUnlock, meteorDetector.TechType);
     }
     
     public static void addPDAEntries() {
