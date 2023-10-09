@@ -46,6 +46,10 @@ namespace ReikaKalseki.Auroresource {
 			}
 		}
 		
+		public static void onGeyserSpawn(Geyser g) {
+			g.gameObject.EnsureComponent<GeyserMaterialSpawner>().geyser = g;
+		}
+		
 		public static void onMapRoomSpawn(MapRoomFunctionality map) {
 			if (Array.IndexOf(map.allowedUpgrades, AuroresourceMod.meteorDetector.TechType) < 0)
 				typeof(MapRoomFunctionality).GetField("allowedUpgrades", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(map, map.allowedUpgrades.addToArray(AuroresourceMod.meteorDetector.TechType));

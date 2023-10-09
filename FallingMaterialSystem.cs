@@ -21,6 +21,7 @@ namespace ReikaKalseki.Auroresource {
 		public static readonly FallingMaterialSystem instance = new FallingMaterialSystem();
 		
 		private static readonly SoundManager.SoundData entrySound = SoundManager.registerSound(AuroresourceMod.modDLL, "debrisentry", "Sounds/debris-entry.ogg", SoundManager.soundMode3D, s => {SoundManager.setup3D(s, 9999);}, SoundSystem.masterBus);
+		private static readonly SoundManager.SoundData alertSound = SoundManager.registerSound(AuroresourceMod.modDLL, "debrisalert", "Sounds/debris-alert.ogg", SoundManager.soundMode3D, s => {SoundManager.setup3D(s, 9999);}, SoundSystem.masterBus);
 		internal static readonly SoundManager.SoundData splashSound = SoundManager.registerSound(AuroresourceMod.modDLL, "debrissplash", "Sounds/debris-splash.ogg", SoundManager.soundMode3D, s => {SoundManager.setup3D(s, 9999);}, SoundSystem.masterBus);
 		
 		private static readonly Vector3 auroraPoint1 = new Vector3(746, 0, -362);
@@ -180,6 +181,8 @@ namespace ReikaKalseki.Auroresource {
 				if (currentSpawner) {
 					signal.move(currentSpawner.transform.position);
 					signal.attachToObject(currentSpawner.gameObject);
+					if (!countdown.holder.activeSelf)
+						SoundManager.playSoundAt(alertSound, currentSpawner.transform.position, false, 9999);
 					countdown.holder.SetActive(true);
 				}
 			}
