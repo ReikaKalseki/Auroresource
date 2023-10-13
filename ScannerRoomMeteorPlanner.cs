@@ -22,7 +22,7 @@ namespace ReikaKalseki.Auroresource {
 			sprite = TextureManager.getSprite(AuroresourceMod.modDLL, "Textures/planner");
 			craftingTime = 8;
 			inventorySize = new Vector2int(2, 2);
-			addIngredient(TechType.ComputerChip, 2);
+			addIngredient(TechType.MapRoomCamera, 1);
 			addIngredient(TechType.SeamothSonarModule, 1);
 			addIngredient(TechType.TitaniumIngot, 1);
 			addIngredient(TechType.Polyaniline, 1);

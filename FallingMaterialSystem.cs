@@ -73,6 +73,8 @@ namespace ReikaKalseki.Auroresource {
 		}
 		
 		internal void tick(float time, float dT) {
+			if (!DIHooks.isWorldLoaded())
+				return;
 			if (items.isEmpty())
 				return;
 			
@@ -159,7 +161,8 @@ namespace ReikaKalseki.Auroresource {
 			item.transform.SetParent(go.transform);
 			item.transform.localPosition = Vector3.zero;
 			go.GetComponent<FallingMaterialTag>().velocity = MathUtil.getRandomVectorAround(Vector3.zero, 20).setY(-24);
-			SoundManager.playSoundAt(entrySound, go.transform.position, false, 9999);
+			if (Player.main.transform.position.y >= -50)
+				SoundManager.playSoundAt(entrySound, go.transform.position, false, 9999);
 			UnityEngine.Object.Destroy(currentSpawner.gameObject);
 			currentSpawner = null;
 			countdown.holder.SetActive(false);
@@ -267,7 +270,8 @@ namespace ReikaKalseki.Auroresource {
 						p.Stop(true, ParticleSystemStopBehavior.StopEmitting);
 					GetComponentInChildren<Pickupable>().transform.SetParent(null);
 					UnityEngine.Object.Destroy(gameObject, 3);
-					SoundManager.playSoundAt(FallingMaterialSystem.splashSound, transform.position, false, 9999);
+					if (Player.main.transform.position.y >= -100 || Vector3.Distance(Player.main.transform.position, transform.position) <= 200)
+						SoundManager.playSoundAt(FallingMaterialSystem.splashSound, transform.position, false, 9999);
 				}
 			}
 			else {
