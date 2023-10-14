@@ -73,7 +73,7 @@ namespace ReikaKalseki.Auroresource {
 		}
 		
 		internal void tick(float time, float dT) {
-			if (!DIHooks.isWorldLoaded())
+			if (DIHooks.getWorldAge() < 1)
 				return;
 			if (items.isEmpty())
 				return;
@@ -163,6 +163,7 @@ namespace ReikaKalseki.Auroresource {
 			go.GetComponent<FallingMaterialTag>().velocity = MathUtil.getRandomVectorAround(Vector3.zero, 20).setY(-24);
 			if (Player.main.transform.position.y >= -50)
 				SoundManager.playSoundAt(entrySound, go.transform.position, false, 9999);
+			signal.deactivate();
 			UnityEngine.Object.Destroy(currentSpawner.gameObject);
 			currentSpawner = null;
 			countdown.holder.SetActive(false);
