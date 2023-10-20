@@ -100,8 +100,12 @@ namespace ReikaKalseki.Auroresource {
 				}
 			}
 			
-			if (countdown && currentSpawner)
-				countdown.setTime(currentSpawner.timeLeft);
+			if (countdown) {
+				if (currentSpawner)
+					countdown.setTime(currentSpawner.timeLeft);
+				else
+					countdown.holder.SetActive(false);
+			}
 			if (nextReEntry <= 0) {
 				scheduleNextReEntry(time);
 			}
