@@ -158,17 +158,22 @@ namespace ReikaKalseki.Auroresource {
 			if (items.isEmpty())
 				return;
 			GameObject go = ObjectUtil.createWorldObject(fallingMaterial.ClassID);
+			if (!go)
+				return;
 			go.transform.position = MathUtil.getRandomVectorAround(pos, new Vector3(100, 0, 100)).setY(UnityEngine.Random.Range(500F, 1500F));
 			foreach (ParticleSystem p in go.GetComponentsInChildren<ParticleSystem>())
 				p.Play();
 			GameObject item = ObjectUtil.createWorldObject(items.getRandomEntry());
+			if (!item)
+				return;
 			item.transform.SetParent(go.transform);
 			item.transform.localPosition = Vector3.zero;
-			go.GetComponent<FallingMaterialTag>().velocity = MathUtil.getRandomVectorAround(Vector3.zero, 20).setY(-24);
+			go.EnsureComponent<FallingMaterialTag>().velocity = MathUtil.getRandomVectorAround(Vector3.zero, 20).setY(-24);
 			if (Player.main.transform.position.y >= -50)
 				SoundManager.playSoundAt(entrySound, go.transform.position, false, 9999);
 			signal.deactivate();
-			UnityEngine.Object.Destroy(currentSpawner.gameObject);
+			if (currentSpawner)
+				UnityEngine.Object.Destroy(currentSpawner.gameObject);
 			currentSpawner = null;
 			countdown.holder.SetActive(false);
 		}
@@ -189,6 +194,7 @@ namespace ReikaKalseki.Auroresource {
 				if (currentSpawner) {
 					signal.move(currentSpawner.transform.position);
 					signal.attachToObject(currentSpawner.gameObject);
+					signal.activate();
 					if (!countdown.holder.activeSelf)
 						SoundManager.playSoundAt(alertSound, currentSpawner.transform.position, false, 9999);
 					countdown.holder.SetActive(true);
