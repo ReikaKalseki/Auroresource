@@ -304,6 +304,7 @@ namespace ReikaKalseki.Auroresource {
 				timeLeft -= Time.deltaTime;
 				if (timeLeft <= 0) {
 					FallingMaterialSystem.instance.spawnItem(transform.position);
+					UnityEngine.Object.Destroy(gameObject);
 				}
 			}
 		}
