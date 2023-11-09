@@ -86,8 +86,8 @@ namespace ReikaKalseki.Auroresource
 	    PDAMessagePrompts.instance.addPDAMessage(voLocale.getEntry("auroracut"));
         PDAMessagePrompts.instance.addPDAMessage(voLocale.getEntry("jailbreak"));
         
-        GenUtil.registerWorldgen(new PositionedPrefab(dunesMeteor.ClassID, new Vector3(-1125, -409, 1130)));
-        GenUtil.registerWorldgen(new PositionedPrefab(lavaPitCenter.ClassID, new Vector3(-273, -1355-56, -152)));
+        GenUtil.registerWorldgen(new PositionedPrefab(dunesMeteor.ClassID, WorldUtil.DUNES_METEOR+Vector3.down*29));
+        GenUtil.registerWorldgen(new PositionedPrefab(lavaPitCenter.ClassID, WorldUtil.LAVA_DOME+Vector3.down*56));
         GenUtil.registerWorldgen(new PositionedPrefab(VanillaCreatures.REAPER.prefab, new Vector3(-1125, -209, 1130)));
         
         System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(ARHooks).TypeHandle);
