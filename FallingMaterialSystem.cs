@@ -47,6 +47,10 @@ namespace ReikaKalseki.Auroresource {
 		
 		private string timerText;
 		
+		public static event Action<GameObject, float> timerBeginEvent;
+		public static event Action<GameObject> entryEvent;
+		public static event Action<GameObject, Pickupable> impactEvent;
+		
 		private FallingMaterialSystem() {
 
 		}
@@ -126,12 +130,14 @@ namespace ReikaKalseki.Auroresource {
 			currentSpawner = go.EnsureComponent<FallingMaterialSpawnerTag>();
 			currentSpawner.timeLeft = UnityEngine.Random.Range(5F, 15F)*60*AuroresourceMod.config.getFloat(ARConfig.ConfigEntries.REENTRY_WARNING);
 			countdown.setTime(currentSpawner.timeLeft);
+			if (timerBeginEvent != null)
+				timerBeginEvent.Invoke(currentSpawner.gameObject, currentSpawner.timeLeft);
 		}
 		
 		private Vector3 selectRandomPosition() {
-			Vector3 sel = MathUtil.getRandomVectorAround(Vector3.zero, new Vector3(1500, 0, 1500));
+			Vector3 sel = MathUtil.getRandomVectorAround(Player.main.transform.position.setY(0), new Vector3(1200, 0, 1200));
 			while (isCloseToExclusion(sel)) {
-				sel = MathUtil.getRandomVectorAround(Vector3.zero, new Vector3(1500, 0, 1500));
+				sel = MathUtil.getRandomVectorAround(Player.main.transform.position.setY(0), new Vector3(1200, 0, 1200));
 			}
 			return sel.setY(-2);
 		}
@@ -168,7 +174,8 @@ namespace ReikaKalseki.Auroresource {
 				return;
 			item.transform.SetParent(go.transform);
 			item.transform.localPosition = Vector3.zero;
-			go.EnsureComponent<FallingMaterialTag>().velocity = MathUtil.getRandomVectorAround(Vector3.zero, 20).setY(-24);
+			FallingMaterialTag tag = go.EnsureComponent<FallingMaterialTag>();
+			tag.velocity = MathUtil.getRandomVectorAround(Vector3.zero, 20).setY(-24);
 			if (Player.main.transform.position.y >= -50)
 				SoundManager.playSoundAt(entrySound, go.transform.position, false, 9999);
 			signal.deactivate();
@@ -176,6 +183,8 @@ namespace ReikaKalseki.Auroresource {
 				UnityEngine.Object.Destroy(currentSpawner.gameObject);
 			currentSpawner = null;
 			countdown.holder.SetActive(false);
+			if (entryEvent != null)
+				entryEvent.Invoke(go);
 		}
 	    
 	    internal void modifyScannableList(uGUI_MapRoomScanner gui) {
@@ -208,6 +217,11 @@ namespace ReikaKalseki.Auroresource {
 		
 		internal bool hasFinderUpgrade(MapRoomFunctionality map) {
 			return map.storageContainer.container.GetCount(AuroresourceMod.meteorDetector.TechType) > 0;
+		}
+		
+		internal void impact(FallingMaterialTag tag, Pickupable pp) {
+			if (impactEvent != null)
+				impactEvent.Invoke(tag.gameObject, pp);
 		}
 	}
 	
@@ -279,10 +293,12 @@ namespace ReikaKalseki.Auroresource {
 					isDestroyed = true;
 					foreach (ParticleSystem p in GetComponentsInChildren<ParticleSystem>())
 						p.Stop(true, ParticleSystemStopBehavior.StopEmitting);
-					GetComponentInChildren<Pickupable>().transform.SetParent(null);
+					Pickupable pp = GetComponentInChildren<Pickupable>();
+					pp.transform.SetParent(null);
 					UnityEngine.Object.Destroy(gameObject, 3);
 					if (Player.main.transform.position.y >= -100 || Vector3.Distance(Player.main.transform.position, transform.position) <= 200)
 						SoundManager.playSoundAt(FallingMaterialSystem.splashSound, transform.position, false, 9999);
+					FallingMaterialSystem.instance.impact(this, pp);
 				}
 			}
 			else {
