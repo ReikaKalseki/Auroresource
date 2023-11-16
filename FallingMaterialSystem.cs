@@ -296,8 +296,10 @@ namespace ReikaKalseki.Auroresource {
 					Pickupable pp = GetComponentInChildren<Pickupable>();
 					pp.transform.SetParent(null);
 					UnityEngine.Object.Destroy(gameObject, 3);
-					if (Player.main.transform.position.y >= -100 || Vector3.Distance(Player.main.transform.position, transform.position) <= 200)
-						SoundManager.playSoundAt(FallingMaterialSystem.splashSound, transform.position, false, 9999);
+					if (Player.main.transform.position.y >= -100 || Vector3.Distance(Player.main.transform.position, transform.position) <= 200) {
+						float vol = (float)Math.Min(MathUtil.linterpolate(-Player.main.transform.position.y, 50, 200, 1, 0, true), MathUtil.linterpolate(Vector3.Distance(Player.main.transform.position, transform.position), 200, 350, 1, 0, true));
+						SoundManager.playSoundAt(FallingMaterialSystem.splashSound, transform.position, false, 9999, vol);
+					}
 					FallingMaterialSystem.instance.impact(this, pp);
 				}
 			}
