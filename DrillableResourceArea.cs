@@ -7,6 +7,7 @@ using UnityEngine.Serialization;
 using UnityEngine.Scripting;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using System.Linq;
 using ReikaKalseki.DIAlterra;
 using SMLHelper.V2.Handlers;
 using SMLHelper.V2.Utility;
@@ -18,6 +19,7 @@ namespace ReikaKalseki.Auroresource {
 		
 		public static readonly float DURATION = 200*AuroresourceMod.config.getFloat(ARConfig.ConfigEntries.SPEED);
 		
+		private static float maxRadius = -1;
 		private static readonly Dictionary<string, DrillableResourceArea> NODES = new Dictionary<string, DrillableResourceArea>();
 		
 		private readonly WeightedRandom<TechType> drops = new WeightedRandom<TechType>();
@@ -28,6 +30,10 @@ namespace ReikaKalseki.Auroresource {
 		
 		public static DrillableResourceArea getResourceNode(string id) {
 			return NODES.ContainsKey(id) ? NODES[id] : null;
+		}
+		
+		public static float getMaxRadius() {
+			return maxRadius;
 		}
 		
 		protected DrillableResourceArea(XMLLocale.LocaleEntry e, float r) : base(e.key, e.name, e.desc) {
@@ -44,6 +50,7 @@ namespace ReikaKalseki.Auroresource {
 			Patch();
 			SNUtil.addScanUnlock(this, scanTime, PDAManager.getPage(locale.pda));
 			NODES[ClassID] = this;
+			maxRadius = Mathf.Max(maxRadius, radius);
 		}
 		
 		public void updateLocale() {
@@ -54,8 +61,16 @@ namespace ReikaKalseki.Auroresource {
 			}
 		}
 		
+		public List<TechType> getAllAvailableResources() {
+			return new List<TechType>(drops.getValues());
+		}
+		
+		public TechType getRandomResourceType() {
+			return drops.getRandomEntry();
+		}
+		
 		public GameObject getRandomResource() {
-			return ObjectUtil.lookupPrefab(drops.getRandomEntry());
+			return ObjectUtil.lookupPrefab(getRandomResourceType());
 		}
 			
 	    public override sealed GameObject GetGameObject() {
@@ -64,6 +79,7 @@ namespace ReikaKalseki.Auroresource {
 				world.SetActive(false);
 				world.EnsureComponent<TechTag>().type = TechType;
 				world.EnsureComponent<PrefabIdentifier>().ClassId = ClassID;
+				world.EnsureComponent<LargeWorldEntity>().cellLevel = LargeWorldEntity.CellLevel.Global;
 				MeshRenderer[] r = world.GetComponentsInChildren<MeshRenderer>();
 				for (int i = 1; i < r.Length; i++) {
 					UnityEngine.Object.DestroyImmediate(r[i].gameObject);
@@ -73,7 +89,7 @@ namespace ReikaKalseki.Auroresource {
 				sc.radius = radius;
 				sc.center = Vector3.zero;
 				sc.isTrigger = true;
-				world.EnsureComponent<InfinitelyDrillable>();
+				world.EnsureComponent<DrillableResourceAreaTag>();
 				Drillable dr = world.EnsureComponent<Drillable>();
 				dr.Start();
 				dr.health[0] = DURATION;//harvestSpeedMultiplier;
@@ -100,12 +116,32 @@ namespace ReikaKalseki.Auroresource {
 			}
 	    }
 		
-		class InfinitelyDrillable : SpecialDrillable {
+		public class DrillableResourceAreaTag : SpecialDrillable {
 			
 			private Drillable drill;
 			private GameObject innerObject;
+			private Rigidbody body;
+			/*
+			void OnDisable() {
+				gameObject.SetActive(true);
+			}
+			
+			void OnDestroy() {
+				if (Player.main) {
+					GameObject put = ObjectUtil.createWorldObject(GetComponent<PrefabIdentifier>().ClassId);
+					put.transform.SetParent(transform.parent);
+					put.transform.position = transform.position;
+					put.transform.rotation = transform.rotation;
+					put.transform.localScale = transform.localScale;
+					SNUtil.log("Intercepted attempted delete of "+this+", spawning new one");
+				}
+			}*/
 			
 			void Update() {
+				if (!body)
+					body = GetComponent<Rigidbody>();
+				body.isKinematic = true;
+				body.constraints = RigidbodyConstraints.FreezeAll;
 				if (!drill || !innerObject) {
 					drill = gameObject.GetComponent<Drillable>();
 					innerObject = drill.GetComponentsInChildren<MeshRenderer>(true)[0].gameObject;

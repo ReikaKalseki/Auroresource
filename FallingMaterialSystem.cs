@@ -24,9 +24,6 @@ namespace ReikaKalseki.Auroresource {
 		private static readonly SoundManager.SoundData alertSound = SoundManager.registerSound(AuroresourceMod.modDLL, "debrisalert", "Sounds/debris-alert.ogg", SoundManager.soundMode3D, s => {SoundManager.setup3D(s, 9999);}, SoundSystem.masterBus);
 		internal static readonly SoundManager.SoundData splashSound = SoundManager.registerSound(AuroresourceMod.modDLL, "debrissplash", "Sounds/debris-splash.ogg", SoundManager.soundMode3D, s => {SoundManager.setup3D(s, 9999);}, SoundSystem.masterBus);
 		
-		private static readonly Vector3 auroraPoint1 = new Vector3(746, 0, -362);
-		private static readonly Vector3 auroraPoint2 = new Vector3(1295, 0, 110);
-		private static readonly float auroraPointRadius = 275;
 		private static readonly Vector3 mountainIslandPoint1 = new Vector3(360, 0, 1040);
 		private static readonly Vector3 mountainIslandPoint2 = new Vector3(347, 0, 909);
 		private static readonly float mountainIslandPointRadius = 80;
@@ -147,7 +144,7 @@ namespace ReikaKalseki.Auroresource {
 				return true;
 			if (MathUtil.getDistanceToLineSegment(sel, mountainIslandPoint1, mountainIslandPoint2) <= mountainIslandPointRadius)
 				return true;
-			if (MathUtil.getDistanceToLineSegment(sel, auroraPoint1, auroraPoint2) <= auroraPointRadius)
+			if (WorldUtil.isInsideAurora2D(sel))
 				return true;
 			return false;
 		}
