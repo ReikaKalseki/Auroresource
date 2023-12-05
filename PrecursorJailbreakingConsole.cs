@@ -59,7 +59,7 @@ namespace ReikaKalseki.Auroresource {
 				if (target) {
 					bool unlock = Story.StoryGoalManager.main.completedGoals.Contains(AuroresourceMod.laserCutterJailbroken.key);
 					Pickupable held = Inventory.main.GetHeld();
-					target.isValidHandTarget = !unlock && held && held.GetTechType() == TechType.LaserCutter;
+					target.isValidHandTarget = !unlock && held && held.GetComponent<LaserCutter>();// held.GetTechType() == TechType.LaserCutter;
 					target.enabled = target.isValidHandTarget;
 					terminal.enabled = target.enabled;
 					target.secondaryTooltip = target.enabled ? AuroresourceMod.console.locale.getField<string>("tooltipSecondary") : AuroresourceMod.console.locale.getField<string>("tooltipDisabled");

@@ -48,7 +48,7 @@ namespace ReikaKalseki.Auroresource {
 		
 		public void register(int scanTime = 20) {
 			Patch();
-			SNUtil.addScanUnlock(this, scanTime, PDAManager.getPage(locale.pda));
+			SNUtil.addScanUnlock(TechType, FriendlyName, scanTime, PDAManager.getPage(locale.pda));
 			NODES[ClassID] = this;
 			maxRadius = Mathf.Max(maxRadius, radius);
 		}
