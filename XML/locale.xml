@@ -9,6 +9,12 @@
 		<pda>
 			meteorite
 		</pda>
+		<materialListHeader>
+			Possible Materials:
+		</materialListHeader>
+		<fcsNote>
+			This deposit can be harvested with automated mining machinery, but the use of such hardware may influence overall yields and specific material production rates.
+		</fcsNote>
 		<tooltip>
 			Metal-rich Meteorite
 		</tooltip>
@@ -26,6 +32,15 @@
 		<pda>
 			lavadome
 		</pda>
+		<materialListHeader>
+			Possible Materials:
+		</materialListHeader>
+		<fcsNote>
+			This deposit can be harvested with automated mining machinery, but the use of such hardware may influence overall yields and specific material production rates.
+		</fcsNote>
+		<tooltip>
+			Lava Dome
+		</tooltip>
 		<tooltip>
 			Lava Dome
 		</tooltip>

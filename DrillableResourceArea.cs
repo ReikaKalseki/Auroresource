@@ -55,10 +55,12 @@ namespace ReikaKalseki.Auroresource {
 		
 		public void updateLocale() {
 			PDAManager.PDAPage page = PDAManager.getPage(locale.pda);
-			page.append("\n\nPossible Materials:\n");
+			page.append("\n\n"+locale.getField<string>("materialListHeader")+"\n");
 			foreach (TechType tt in drops.getValues()) {
 				page.append(Language.main.strings[tt.AsString(false)]+": "+(drops.getProbability(tt)*100).ToString("0.0")+"%\n");
 			}
+			if (InstructionHandlers.getTypeBySimpleName("FCS_ProductionSolutions.Mods.DeepDriller.HeavyDuty.Mono.FCSDeepDrillerOreGenerator") != null)
+				page.append("\n\n"+locale.getField<string>("fcsNote"));
 		}
 		
 		public List<TechType> getAllAvailableResources() {

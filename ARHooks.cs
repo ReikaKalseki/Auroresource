@@ -19,6 +19,7 @@ namespace ReikaKalseki.Auroresource {
 	public static class ARHooks {
 	    
 	    static ARHooks() {
+			SNUtil.log("Initializing ARHooks");
 	    	DIHooks.onPlayerTickEvent += tickPlayer;
 			DIHooks.itemTooltipEvent += generateItemTooltips;
 	    	DIHooks.onItemPickedUpEvent += onItemPickedUp;
