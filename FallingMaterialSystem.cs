@@ -149,6 +149,10 @@ namespace ReikaKalseki.Auroresource {
 			return false;
 		}
 		
+		public float getTimeUntilNextEntry() {
+			return DayNightCycle.main.timePassedAsFloat-nextReEntry;
+		}
+		
 		private void scheduleNextReEntry(float time) {
 			nextReEntry = time+UnityEngine.Random.Range(20F, 60F)*60/AuroresourceMod.config.getFloat(ARConfig.ConfigEntries.REENTRY_RATE); //default every 20-60 min
 		}

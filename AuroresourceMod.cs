@@ -105,8 +105,8 @@ namespace ReikaKalseki.Auroresource
         
         TechTypeMappingConfig<float>.loadInline("falling_materials", TechTypeMappingConfig<float>.FloatParser.instance, FallingMaterialSystem.instance.addMaterial);
         
-        //ConsoleCommandsHandler.Main.RegisterConsoleCommand<Action>("triggerFallingDebris", FallingMaterialSystem.instance.spawnItem);
-        //ConsoleCommandsHandler.Main.RegisterConsoleCommand<Action>("queueFallingDebris", FallingMaterialSystem.instance.queueSpawn);
+        ConsoleCommandsHandler.Main.RegisterConsoleCommand<Action>("triggerFallingDebris", FallingMaterialSystem.instance.spawnItem);
+        ConsoleCommandsHandler.Main.RegisterConsoleCommand<Action>("queueFallingDebris", FallingMaterialSystem.instance.queueSpawn);
     }
     
     [QModPostPatch]
