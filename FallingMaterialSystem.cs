@@ -110,7 +110,7 @@ namespace ReikaKalseki.Auroresource {
 			if (nextReEntry <= 0) {
 				scheduleNextReEntry(time);
 			}
-			else if (time >= nextReEntry) {
+			else if (time >= nextReEntry && !VanillaBiomes.VOID.isInBiome(Player.main.transform.position)) {
 				//spawnItem();
 				queueSpawn();
 				scheduleNextReEntry(time);
@@ -133,7 +133,7 @@ namespace ReikaKalseki.Auroresource {
 		
 		private Vector3 selectRandomPosition() {
 			Vector3 sel = MathUtil.getRandomVectorAround(Player.main.transform.position.setY(0), new Vector3(1200, 0, 1200));
-			while (isCloseToExclusion(sel)) {
+			while (VanillaBiomes.VOID.isInBiome(sel.setY(-5)) || isCloseToExclusion(sel)) {
 				sel = MathUtil.getRandomVectorAround(Player.main.transform.position.setY(0), new Vector3(1200, 0, 1200));
 			}
 			return sel.setY(-2);
@@ -150,7 +150,7 @@ namespace ReikaKalseki.Auroresource {
 		}
 		
 		public float getTimeUntilNextEntry() {
-			return DayNightCycle.main.timePassedAsFloat-nextReEntry;
+			return nextReEntry-DayNightCycle.main.timePassedAsFloat;
 		}
 		
 		private void scheduleNextReEntry(float time) {
