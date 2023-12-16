@@ -78,6 +78,7 @@ namespace ReikaKalseki.Auroresource {
 	    public override sealed GameObject GetGameObject() {
 			GameObject world = ObjectUtil.createWorldObject(VanillaResources.LARGE_QUARTZ.prefab, true, false);
 			if (world != null) {
+				world.name = ClassID;
 				world.SetActive(false);
 				world.EnsureComponent<TechTag>().type = TechType;
 				world.EnsureComponent<PrefabIdentifier>().ClassId = ClassID;
