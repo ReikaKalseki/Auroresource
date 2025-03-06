@@ -110,11 +110,19 @@ namespace ReikaKalseki.Auroresource {
 			if (nextReEntry <= 0) {
 				scheduleNextReEntry(time);
 			}
-			else if (time >= nextReEntry && !VanillaBiomes.VOID.isInBiome(Player.main.transform.position)) {
+			else if (time >= nextReEntry && !isPlayerInValidBiome()) {
 				//spawnItem();
 				queueSpawn();
 				scheduleNextReEntry(time);
 			}
+		}
+		
+		internal bool isPlayerInValidBiome() {
+			Vector3 pos = Player.main.transform.position;
+			if (Player.main.precursorOutOfWater || pos.y < -600 || Creature.prisonAquriumBounds.Contains(pos))
+				return false;
+			BiomeBase bb = BiomeBase.getBiome(pos);
+			return bb != VanillaBiomes.VOID && bb != VanillaBiomes.LOSTRIVER && bb != VanillaBiomes.COVE && bb != VanillaBiomes.ILZ && bb != VanillaBiomes.ALZ;
 		}
 		
 		internal void queueSpawn() {
@@ -322,10 +330,14 @@ namespace ReikaKalseki.Auroresource {
 			if (timeLeft >= 0) {
 				timeLeft -= Time.deltaTime;
 				if (timeLeft <= 0) {
-					FallingMaterialSystem.instance.spawnItem(transform.position);
-					UnityEngine.Object.Destroy(gameObject);
+					forceSpawn();
 				}
 			}
+		}
+		
+		public void forceSpawn() {
+			FallingMaterialSystem.instance.spawnItem(transform.position);
+			UnityEngine.Object.Destroy(gameObject);
 		}
 		
 	}

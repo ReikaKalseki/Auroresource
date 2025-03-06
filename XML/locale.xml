@@ -90,4 +90,26 @@
 			
 		</pda>
 	</ScannerRoomMeteorPlanner>
+	<AuroraLaserCut>
+		<name>
+			
+		</name>
+		<desc>
+			Use unlocked laser cutter to harvest metal salvage
+		</desc>
+		<pda>
+			
+		</pda>
+	</AuroraLaserCut>
+	<AuroraLaserCutNeedsUnlock>
+		<name>
+			
+		</name>
+		<desc>
+			Laser cutter firmware forbids dismantling Alterra property
+		</desc>
+		<pda>
+			
+		</pda>
+	</AuroraLaserCutNeedsUnlock>
 </Root>

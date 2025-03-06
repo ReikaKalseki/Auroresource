@@ -24,12 +24,12 @@ namespace ReikaKalseki.Auroresource
 		
 		static GeyserMaterialSpawner() {
 			drops.addEntry(TechType.Gold, 30);
-			drops.addEntry(TechType.Copper, 10);
+			drops.addEntry(TechType.Copper, 20);
 			drops.addEntry(TechType.Silver, 10);
 			drops.addEntry(TechType.Lead, 30);
 			drops.addEntry(TechType.Lithium, 40);
-			drops.addEntry(TechType.Magnetite, 30);
-			drops.addEntry(TechType.UraniniteCrystal, 10);
+			drops.addEntry(TechType.Magnetite, 10);
+			drops.addEntry(TechType.UraniniteCrystal, 5);
 			drops.addEntry(TechType.Quartz, 20);
 		}
 			
@@ -48,7 +48,7 @@ namespace ReikaKalseki.Auroresource
 		private bool trySpawnMineral() {
 			if (WorldUtil.getObjectsNearMatching(transform.position, 25, isEjectedMineral).Count > 6)
 				return false;
-			GameObject go = ObjectUtil.lookupPrefab(drops.getRandomEntry());
+			GameObject go = ObjectUtil.lookupPrefab(getRandomMineral());
 			if (go) {
 				go = UnityEngine.Object.Instantiate(go, transform.position+Vector3.up*3.5F, UnityEngine.Random.rotationUniform);
 				Rigidbody rb = go.GetComponent<Rigidbody>();
@@ -61,6 +61,10 @@ namespace ReikaKalseki.Auroresource
 				return true;
 			}
 			return false;
+		}
+		
+		public static TechType getRandomMineral() {
+			return drops.getRandomEntry();
 		}
 		
 		private bool isEjectedMineral(GameObject go) {

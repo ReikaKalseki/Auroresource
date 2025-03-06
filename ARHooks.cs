@@ -89,8 +89,6 @@ namespace ReikaKalseki.Auroresource {
 			    	HandReticle.main.SetInteractText("");
 			    }
 			});
-			LanguageHandler.SetLanguageLine("AuroraLaserCut", "Use unlocked laser cutter to harvest metal salvage");
-			LanguageHandler.SetLanguageLine("AuroraLaserCutNeedsUnlock", "Laser cutter firmware forbids dismantling Alterra property");
 	    }
 	    
 	    public static GameObject getDrillableDrop(Drillable d) {

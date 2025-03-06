@@ -103,6 +103,9 @@ namespace ReikaKalseki.Auroresource
         		PDAMessagePrompts.instance.trigger("jailbreak");
 		});
         
+        CustomLocaleKeyDatabase.registerKey(locale.getEntry("AuroraLaserCut"));
+        CustomLocaleKeyDatabase.registerKey(locale.getEntry("AuroraLaserCutNeedsUnlock"));
+        
         TechTypeMappingConfig<float>.loadInline("falling_materials", TechTypeMappingConfig<float>.FloatParser.instance, FallingMaterialSystem.instance.addMaterial);
         
         ConsoleCommandsHandler.Main.RegisterConsoleCommand<Action>("triggerFallingDebris", FallingMaterialSystem.instance.spawnItem);
@@ -115,6 +118,12 @@ namespace ReikaKalseki.Auroresource
 		if (irid != null) {
 			SNUtil.log("Found iridium ore. Adding to meteor drop list.");
 			dunesMeteor.addDrop(irid.TechType, 15);
+		}
+		
+		Spawnable calc = ItemRegistry.instance.getItem("CALCITE");
+		if (calc != null) {
+			SNUtil.log("Found calc ore. Adding to lava dome drop list.");
+			lavaPitCenter.addDrop(calc.TechType, 40);
 		}
 		
 		if (detectorUnlock != TechType.None)
