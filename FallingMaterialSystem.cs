@@ -110,7 +110,7 @@ namespace ReikaKalseki.Auroresource {
 			if (nextReEntry <= 0) {
 				scheduleNextReEntry(time);
 			}
-			else if (time >= nextReEntry && !isPlayerInValidBiome()) {
+			else if (time >= nextReEntry && isPlayerInValidBiome()) {
 				//spawnItem();
 				queueSpawn();
 				scheduleNextReEntry(time);
