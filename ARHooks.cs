@@ -39,7 +39,8 @@ namespace ReikaKalseki.Auroresource {
 	    	FallingMaterialSystem.instance.tick(time, dT);
 		}
 		
-		public static void onItemPickedUp(Pickupable p, Exosuit prawn, bool isKnife) {
+		public static void onItemPickedUp(DIHooks.ItemPickup ip) {
+			Pickupable p = ip.item;
 			FallingMaterialTag tag = p.GetComponentInParent<FallingMaterialTag>();
 			if (tag) {
 				p.transform.SetParent(null);

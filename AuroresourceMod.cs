@@ -114,18 +114,6 @@ namespace ReikaKalseki.Auroresource
     
     [QModPostPatch]
     public static void PostLoad() {
-		Spawnable irid = ItemRegistry.instance.getItem("IRIDIUM");
-		if (irid != null) {
-			SNUtil.log("Found iridium ore. Adding to meteor drop list.");
-			dunesMeteor.addDrop(irid.TechType, 15);
-		}
-		
-		Spawnable calc = ItemRegistry.instance.getItem("CALCITE");
-		if (calc != null) {
-			SNUtil.log("Found calc ore. Adding to lava dome drop list.");
-			lavaPitCenter.addDrop(calc.TechType, 40);
-		}
-		
 		if (detectorUnlock != TechType.None)
 			TechnologyUnlockSystem.instance.addDirectUnlock(detectorUnlock, meteorDetector.TechType);
     }

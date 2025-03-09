@@ -41,7 +41,7 @@ namespace ReikaKalseki.Auroresource {
 			radius = r;
 		}
 		
-		internal DrillableResourceArea addDrop(TechType drop, double weight) {
+		public DrillableResourceArea addDrop(TechType drop, double weight) {
 			drops.addEntry(drop, weight);
 			return this;
 		}
