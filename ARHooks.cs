@@ -50,6 +50,7 @@ namespace ReikaKalseki.Auroresource {
 		
 		public static void onGeyserSpawn(Geyser g) {
 			g.gameObject.EnsureComponent<GeyserMaterialSpawner>().geyser = g;
+			//WorldUtil.registeredGeysers.Add(new PositionedPrefab(g.GetComponent<PrefabIdentifier>()));
 		}
 		
 		public static void onMapRoomSpawn(MapRoomFunctionality map) {

@@ -141,10 +141,14 @@ namespace ReikaKalseki.Auroresource {
 		
 		private Vector3 selectRandomPosition() {
 			Vector3 sel = MathUtil.getRandomVectorAround(Player.main.transform.position.setY(0), new Vector3(1200, 0, 1200));
-			while (VanillaBiomes.VOID.isInBiome(sel.setY(-5)) || isCloseToExclusion(sel)) {
+			while (!isValidPosition(sel)) {
 				sel = MathUtil.getRandomVectorAround(Player.main.transform.position.setY(0), new Vector3(1200, 0, 1200));
 			}
 			return sel.setY(-2);
+		}
+		
+		public bool isValidPosition(Vector3 sel) {
+			return !VanillaBiomes.VOID.isInBiome(sel.setY(-5)) && !isCloseToExclusion(sel);
 		}
 		
 		private bool isCloseToExclusion(Vector3 sel) {
