@@ -17,6 +17,7 @@ namespace ReikaKalseki.Auroresource
 	public class GeyserMaterialSpawner : MonoBehaviour {
 		
 		private static readonly WeightedRandom<TechType> drops = new WeightedRandom<TechType>();
+		private static readonly Dictionary<BiomeBase, float> biomeMultipliers = new Dictionary<BiomeBase, float>();
 		
 		internal Geyser geyser;
 		
@@ -31,6 +32,32 @@ namespace ReikaKalseki.Auroresource
 			drops.addEntry(TechType.Magnetite, 10);
 			drops.addEntry(TechType.UraniniteCrystal, 5);
 			drops.addEntry(TechType.Quartz, 20);
+			
+			biomeMultipliers[VanillaBiomes.SHALLOWS] = 0.8F;
+			biomeMultipliers[VanillaBiomes.JELLYSHROOM] = 0.5F;
+			biomeMultipliers[VanillaBiomes.UNDERISLANDS] = 0.25F;
+			biomeMultipliers[VanillaBiomes.KOOSH] = 3.0F; //because very few, comparable to bottom of underislands
+			
+		}
+		
+		public static void addGeyserMineral(TechType tt, float weight) {
+			drops.addEntry(tt, weight);
+		}
+		
+		public static TechType getRandomMineral() {
+			return drops.getRandomEntry();
+		}
+		
+		public static void addBiomeRateMultiplier(BiomeBase bb, float rate) {
+			biomeMultipliers[bb] = rate;
+		}
+		
+		public static float getBiomeRateMultiplier(Vector3 pos) {
+			return getBiomeRateMultiplier(BiomeBase.getBiome(pos));
+		}
+		
+		public static float getBiomeRateMultiplier(BiomeBase bb) {
+			return biomeMultipliers.ContainsKey(bb) ? biomeMultipliers[bb] : 1;
 		}
 			
 		void Update() {
@@ -63,10 +90,6 @@ namespace ReikaKalseki.Auroresource
 			return false;
 		}
 		
-		public static TechType getRandomMineral() {
-			return drops.getRandomEntry();
-		}
-		
 		private bool isEjectedMineral(GameObject go) {
 			Pickupable pp = go.GetComponent<Pickupable>();
 			if (!pp || !drops.hasEntry(pp.GetTechType()))
@@ -76,7 +99,7 @@ namespace ReikaKalseki.Auroresource
 		}
 		
 		private float getRandomNextTime(float time) {
-			return time+UnityEngine.Random.Range(90, 240)*AuroresourceMod.config.getFloat(ARConfig.ConfigEntries.GEYSER_RESOURCE_RATE);
+			return time+UnityEngine.Random.Range(90, 240)/(AuroresourceMod.config.getFloat(ARConfig.ConfigEntries.GEYSER_RESOURCE_RATE)*getBiomeRateMultiplier(transform.position));
 		}
 		
 	}
