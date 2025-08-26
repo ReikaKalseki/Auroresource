@@ -1,81 +1,84 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Xml;
 using System.Xml.Serialization;
-using UnityEngine;
-using UnityEngine.Serialization;
-using UnityEngine.Scripting;
-using UnityEngine.UI;
-using System.Collections.Generic;
-using System.Linq;
+
 using ReikaKalseki.DIAlterra;
+
+using SMLHelper.V2.Assets;
 using SMLHelper.V2.Handlers;
 using SMLHelper.V2.Utility;
-using SMLHelper.V2.Assets;
+
+using UnityEngine;
+using UnityEngine.Scripting;
+using UnityEngine.Serialization;
+using UnityEngine.UI;
 
 namespace ReikaKalseki.Auroresource {
-	
+
 	public abstract class DrillableResourceArea : Spawnable {
-		
+
 		public static readonly float DURATION = 200*AuroresourceMod.config.getFloat(ARConfig.ConfigEntries.SPEED);
-		
+
 		private static float maxRadius = -1;
 		private static readonly Dictionary<string, DrillableResourceArea> NODES = new Dictionary<string, DrillableResourceArea>();
-		
+
 		private readonly WeightedRandom<TechType> drops = new WeightedRandom<TechType>();
 		public readonly XMLLocale.LocaleEntry locale;
 		public readonly float radius;
-		
+
 		//public float harvestSpeedMultiplier = 1;
-		
+
 		public static DrillableResourceArea getResourceNode(string id) {
 			return NODES.ContainsKey(id) ? NODES[id] : null;
 		}
-		
+
 		public static float getMaxRadius() {
 			return maxRadius;
 		}
-		
+
 		protected DrillableResourceArea(XMLLocale.LocaleEntry e, float r) : base(e.key, e.name, e.desc) {
 			locale = e;
 			radius = r;
 		}
-		
+
 		public DrillableResourceArea addDrop(TechType drop, double weight) {
 			drops.addEntry(drop, weight);
 			return this;
 		}
-		
+
 		public void register(int scanTime = 20) {
-			Patch();
+			this.Patch();
 			SNUtil.addScanUnlock(TechType, FriendlyName, scanTime, PDAManager.getPage(locale.pda));
 			NODES[ClassID] = this;
 			maxRadius = Mathf.Max(maxRadius, radius);
 		}
-		
+
 		public void updateLocale() {
 			PDAManager.PDAPage page = PDAManager.getPage(locale.pda);
-			page.append("\n\n"+locale.getField<string>("materialListHeader")+"\n");
+			page.append("\n\n" + locale.getField<string>("materialListHeader") + "\n");
 			foreach (TechType tt in drops.getValues()) {
-				page.append(Language.main.strings[tt.AsString(false)]+": "+(drops.getProbability(tt)*100).ToString("0.0")+"%\n");
+				page.append(Language.main.strings[tt.AsString(false)] + ": " + (drops.getProbability(tt) * 100).ToString("0.0") + "%\n");
 			}
 			if (InstructionHandlers.getTypeBySimpleName("FCS_ProductionSolutions.Mods.DeepDriller.HeavyDuty.Mono.FCSDeepDrillerOreGenerator") != null)
-				page.append("\n\n"+locale.getField<string>("fcsNote"));
+				page.append("\n\n" + locale.getField<string>("fcsNote"));
 		}
-		
+
 		public List<TechType> getAllAvailableResources() {
 			return new List<TechType>(drops.getValues());
 		}
-		
+
 		public TechType getRandomResourceType() {
 			return drops.getRandomEntry();
 		}
-		
+
 		public GameObject getRandomResource() {
-			return ObjectUtil.lookupPrefab(getRandomResourceType());
+			return ObjectUtil.lookupPrefab(this.getRandomResourceType());
 		}
-			
-	    public override sealed GameObject GetGameObject() {
+
+		public override sealed GameObject GetGameObject() {
 			GameObject world = ObjectUtil.createWorldObject(VanillaResources.LARGE_QUARTZ.prefab, true, false);
 			if (world != null) {
 				world.name = ClassID;
@@ -85,9 +88,9 @@ namespace ReikaKalseki.Auroresource {
 				world.EnsureComponent<LargeWorldEntity>().cellLevel = LargeWorldEntity.CellLevel.Global;
 				MeshRenderer[] r = world.GetComponentsInChildren<MeshRenderer>();
 				for (int i = 1; i < r.Length; i++) {
-					UnityEngine.Object.DestroyImmediate(r[i].gameObject);
+					r[i].gameObject.destroy();
 				}
-				ObjectUtil.removeComponent<Collider>(world);
+				world.removeComponent<Collider>();
 				SphereCollider sc = world.EnsureComponent<SphereCollider>();
 				sc.radius = radius;
 				sc.center = Vector3.zero;
@@ -114,13 +117,13 @@ namespace ReikaKalseki.Auroresource {
 				return world;
 			}
 			else {
-				SNUtil.writeToChat("Could not fetch template GO for "+this);
+				SNUtil.writeToChat("Could not fetch template GO for " + this);
 				return null;
 			}
-	    }
-		
+		}
+
 		public class DrillableResourceAreaTag : SpecialDrillable {
-			
+
 			private Drillable drill;
 			private GameObject innerObject;
 			private Rigidbody body;
@@ -139,10 +142,10 @@ namespace ReikaKalseki.Auroresource {
 					SNUtil.log("Intercepted attempted delete of "+this+", spawning new one");
 				}
 			}*/
-			
+
 			void Update() {
 				if (!body)
-					body = GetComponent<Rigidbody>();
+					body = this.GetComponent<Rigidbody>();
 				body.isKinematic = true;
 				body.constraints = RigidbodyConstraints.FreezeAll;
 				if (!drill || !innerObject) {
@@ -155,16 +158,16 @@ namespace ReikaKalseki.Auroresource {
 				}
 				gameObject.layer = LayerID.Useable;
 			}
-			
+
 			public override bool allowAutomatedGrinding() {
 				return false;
 			}
-			
+
 			public override bool canBeMoved() {
 				return false;
 			}
-			
+
 		}
-			
+
 	}
 }

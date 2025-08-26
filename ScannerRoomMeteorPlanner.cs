@@ -1,32 +1,35 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Xml;
 using System.Xml.Serialization;
-using System.Reflection;
-using UnityEngine;
-using UnityEngine.Serialization;
-using UnityEngine.Scripting;
-using UnityEngine.UI;
-using System.Collections.Generic;
+
 using ReikaKalseki.DIAlterra;
+
+using SMLHelper.V2.Assets;
 using SMLHelper.V2.Handlers;
 using SMLHelper.V2.Utility;
-using SMLHelper.V2.Assets;
+
+using UnityEngine;
+using UnityEngine.Scripting;
+using UnityEngine.Serialization;
+using UnityEngine.UI;
 
 namespace ReikaKalseki.Auroresource {
-	
+
 	public class ScannerRoomMeteorPlanner : BasicCraftingItem {
-		
-	    internal ScannerRoomMeteorPlanner() : base(AuroresourceMod.locale.getEntry("ScannerRoomMeteorPlanner"), "6d1d97a5-75b8-49ef-8944-393d387a37a0") {
+
+		internal ScannerRoomMeteorPlanner() : base(AuroresourceMod.locale.getEntry("ScannerRoomMeteorPlanner"), "6d1d97a5-75b8-49ef-8944-393d387a37a0") {
 			unlockRequirement = TechType.Unobtanium;
 			sprite = TextureManager.getSprite(AuroresourceMod.modDLL, "Textures/planner");
 			craftingTime = 8;
 			inventorySize = new Vector2int(2, 2);
-			addIngredient(TechType.MapRoomCamera, 1);
-			addIngredient(TechType.SeamothSonarModule, 1);
-			addIngredient(TechType.TitaniumIngot, 1);
-			addIngredient(TechType.Polyaniline, 1);
-	    }
+			this.addIngredient(TechType.MapRoomCamera, 1);
+			this.addIngredient(TechType.SeamothSonarModule, 1);
+			this.addIngredient(TechType.TitaniumIngot, 1);
+			this.addIngredient(TechType.Polyaniline, 1);
+		}
 
 		public override TechGroup GroupForPDA {
 			get {
