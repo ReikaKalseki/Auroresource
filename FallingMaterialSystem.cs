@@ -81,7 +81,7 @@ namespace ReikaKalseki.Auroresource {
 			if (!countdown) {
 				uGUI_SunbeamCountdown find = UnityEngine.Object.FindObjectOfType<uGUI_SunbeamCountdown>();
 				if (find) {
-					GameObject go2 = UnityEngine.Object.Instantiate(find.gameObject);
+					GameObject go2 = find.gameObject.clone();
 					countdown = go2.EnsureComponent<FallingMaterialCountdownTag>();
 					uGUI_SunbeamCountdown gui = go2.GetComponent<uGUI_SunbeamCountdown>();
 					countdown.timerText = gui.countdownText;
@@ -167,7 +167,7 @@ namespace ReikaKalseki.Auroresource {
 		}
 
 		internal void spawnItem(Vector3 pos, int num = 1) {
-			if (items.isEmpty())
+			if (items.isEmpty() || !Player.main)
 				return;
 			Vector3 soundPos = Vector3.zero;
 			for (int i = 0; i < num; i++) {
@@ -188,7 +188,8 @@ namespace ReikaKalseki.Auroresource {
 				if (entryEvent != null)
 					entryEvent.Invoke(go);
 			}
-			if (Player.main.transform.position.y >= -50)
+			Vector3 playerPos = Player.main.transform.position;
+			if (playerPos.y >= -50 || (pos.setY(playerPos.y) - playerPos).magnitude < 200)
 				SoundManager.playSoundAt(entrySound, soundPos, false, 9999);
 			signal.deactivate();
 			if (currentSpawner)
@@ -243,7 +244,7 @@ namespace ReikaKalseki.Auroresource {
 
 		public override GameObject GetGameObject() {
 			GameObject go = new GameObject("FallingMaterial(Clone)");
-			GameObject meteor = UnityEngine.Object.Instantiate(VFXSunbeam.main.burningChunkPrefabs[1]);
+			GameObject meteor = VFXSunbeam.main.burningChunkPrefabs[1].clone();
 			meteor.transform.SetParent(go.transform);
 			meteor.transform.localPosition = Vector3.zero;
 			meteor.transform.rotation = Quaternion.Euler(90, UnityEngine.Random.Range(0F, 360F), 0);

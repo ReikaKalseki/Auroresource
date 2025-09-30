@@ -98,7 +98,7 @@ namespace ReikaKalseki.Auroresource {
 				return false;
 			GameObject go = ObjectUtil.lookupPrefab(getRandomMineral(cachedBiome));
 			if (go) {
-				go = UnityEngine.Object.Instantiate(go, transform.position + (Vector3.up * 3.5F), UnityEngine.Random.rotationUniform);
+				go = go.clone(transform.position + (Vector3.up * 3.5F), UnityEngine.Random.rotationUniform);
 				Rigidbody rb = go.GetComponent<Rigidbody>();
 				if (rb) {
 					rb.isKinematic = false;
