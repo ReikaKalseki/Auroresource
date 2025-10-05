@@ -21,14 +21,15 @@ namespace ReikaKalseki.Auroresource {
 		public static class DrillableDropsHook {
 
 			static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions) {
+				InstructionHandlers.logPatchStart(MethodBase.GetCurrentMethod(), instructions);
 				InsnList codes = new InsnList(instructions);
 				try {
 					int idx = InstructionHandlers.getInstruction(codes, 0, 0, OpCodes.Call, "Drillable", "ChooseRandomResource", true, new Type[0]);
 					codes[idx].operand = InstructionHandlers.convertMethodOperand("ReikaKalseki.Auroresource.ARHooks", "getDrillableDrop", false, typeof(Drillable));
-					FileLog.Log("Done patch " + MethodBase.GetCurrentMethod().DeclaringType);
+					InstructionHandlers.logCompletedPatch(MethodBase.GetCurrentMethod(), instructions);
 				}
 				catch (Exception e) {
-					FileLog.Log("Caught exception when running patch " + MethodBase.GetCurrentMethod().DeclaringType + "!");
+					InstructionHandlers.logErroredPatch(MethodBase.GetCurrentMethod());
 					FileLog.Log(e.Message);
 					FileLog.Log(e.StackTrace);
 					FileLog.Log(e.ToString());
@@ -42,13 +43,14 @@ namespace ReikaKalseki.Auroresource {
 		public static class ReefbackGrowthIncrease {
 
 			static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions) {
+				InstructionHandlers.logPatchStart(MethodBase.GetCurrentMethod(), instructions);
 				InsnList codes = new InsnList(instructions);
 				try {
 					codes.patchInitialHook(new CodeInstruction(OpCodes.Ldarg_0), InstructionHandlers.createMethodCall("ReikaKalseki.Auroresource.ARHooks", "onBreakableResourceSpawn", false, typeof(BreakableResource)));
-					FileLog.Log("Done patch " + MethodBase.GetCurrentMethod().DeclaringType);
+					InstructionHandlers.logCompletedPatch(MethodBase.GetCurrentMethod(), instructions);
 				}
 				catch (Exception e) {
-					FileLog.Log("Caught exception when running patch " + MethodBase.GetCurrentMethod().DeclaringType + "!");
+					InstructionHandlers.logErroredPatch(MethodBase.GetCurrentMethod());
 					FileLog.Log(e.Message);
 					FileLog.Log(e.StackTrace);
 					FileLog.Log(e.ToString());
@@ -62,13 +64,14 @@ namespace ReikaKalseki.Auroresource {
 		public static class MapRoomModuleAddHook {
 
 			static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions) {
+				InstructionHandlers.logPatchStart(MethodBase.GetCurrentMethod(), instructions);
 				InsnList codes = new InsnList(instructions);
 				try {
 					codes.patchInitialHook(new CodeInstruction(OpCodes.Ldarg_0), InstructionHandlers.createMethodCall("ReikaKalseki.Auroresource.ARHooks", "onMapRoomSpawn", false, typeof(MapRoomFunctionality)));
-					FileLog.Log("Done patch " + MethodBase.GetCurrentMethod().DeclaringType);
+					InstructionHandlers.logCompletedPatch(MethodBase.GetCurrentMethod(), instructions);
 				}
 				catch (Exception e) {
-					FileLog.Log("Caught exception when running patch " + MethodBase.GetCurrentMethod().DeclaringType + "!");
+					InstructionHandlers.logErroredPatch(MethodBase.GetCurrentMethod());
 					FileLog.Log(e.Message);
 					FileLog.Log(e.StackTrace);
 					FileLog.Log(e.ToString());
@@ -82,13 +85,14 @@ namespace ReikaKalseki.Auroresource {
 		public static class GeyserSpawn {
 
 			static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions) {
+				InstructionHandlers.logPatchStart(MethodBase.GetCurrentMethod(), instructions);
 				InsnList codes = new InsnList(instructions);
 				try {
 					codes.patchInitialHook(new CodeInstruction(OpCodes.Ldarg_0), InstructionHandlers.createMethodCall("ReikaKalseki.Auroresource.ARHooks", "onGeyserSpawn", false, typeof(Geyser)));
-					FileLog.Log("Done patch " + MethodBase.GetCurrentMethod().DeclaringType);
+					InstructionHandlers.logCompletedPatch(MethodBase.GetCurrentMethod(), instructions);
 				}
 				catch (Exception e) {
-					FileLog.Log("Caught exception when running patch " + MethodBase.GetCurrentMethod().DeclaringType + "!");
+					InstructionHandlers.logErroredPatch(MethodBase.GetCurrentMethod());
 					FileLog.Log(e.Message);
 					FileLog.Log(e.StackTrace);
 					FileLog.Log(e.ToString());
