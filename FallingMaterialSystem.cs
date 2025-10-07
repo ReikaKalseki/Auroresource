@@ -368,7 +368,7 @@ namespace ReikaKalseki.Auroresource {
 				currentTime = t;
 				TimeSpan ts = TimeSpan.FromSeconds(currentTime);
 				timerText.text = string.Format("{0:D2}:{1:D2}", ts.Minutes, ts.Seconds);
-				titleText.text = string.Format(FallingMaterialSystem.instance.timerText, num);
+				titleText.text = string.Format(FallingMaterialSystem.instance.timerText, num, "\n");
 			}
 		}
 

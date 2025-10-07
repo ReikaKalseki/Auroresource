@@ -76,7 +76,7 @@
 			
 		</pda>
 		<timer>
-			Debris impact ({0} pieces)\npredicted in:
+			Debris impact ({0} pieces){1}predicted in:
 		</timer>
 	</FallingMaterialSpawner>
 	<ScannerRoomMeteorPlanner>
