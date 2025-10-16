@@ -176,8 +176,10 @@ namespace ReikaKalseki.Auroresource {
 					return;
 				go.transform.position = MathUtil.getRandomVectorAround(pos, new Vector3(100, 0, 100)).setY(UnityEngine.Random.Range(500F, 1500F));
 				soundPos = go.transform.position;
-				foreach (ParticleSystem p in go.GetComponentsInChildren<ParticleSystem>())
-					p.Play();
+				foreach (ParticleSystem p in go.GetComponentsInChildren<ParticleSystem>()) {
+					if (p)
+						p.Play();
+				}
 				GameObject item = ObjectUtil.createWorldObject(items.getRandomEntry());
 				if (!item)
 					return;
@@ -191,11 +193,15 @@ namespace ReikaKalseki.Auroresource {
 			Vector3 playerPos = Player.main.transform.position;
 			if (playerPos.y >= -50 || (pos.setY(playerPos.y) - playerPos).magnitude < 200)
 				SoundManager.playSoundAt(entrySound, soundPos, false, 9999);
-			signal.deactivate();
+			if (signal != null)
+				signal.deactivate();
+			else
+				SNUtil.log("Could not deactivate null signal in FallingMaterial::spawnItem");
 			if (currentSpawner)
 				currentSpawner.gameObject.destroy(false);
 			currentSpawner = null;
-			countdown.holder.SetActive(false);
+			if (countdown && countdown.holder)
+				countdown.holder.SetActive(false);
 		}
 
 		internal void modifyScannableList(uGUI_MapRoomScanner gui) {
