@@ -114,9 +114,9 @@ namespace ReikaKalseki.Auroresource {
 			foreach (XMLLocale.LocaleEntry e in pdaLocale.getEntries()) {
 				PDAManager.PDAPage page = PDAManager.createPage(e);
 				if (e.hasField("audio"))
-					page.setVoiceover(e.getField<string>("audio"));
+					page.setVoiceover(e.getString("audio"));
 				if (e.hasField("header"))
-					page.setHeaderImage(TextureManager.getTexture(modDLL, "Textures/PDA/" + e.getField<string>("header")));
+					page.setHeaderImage(TextureManager.getTexture(modDLL, "Textures/PDA/" + e.getString("header")));
 				page.register();
 			}
 		}

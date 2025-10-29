@@ -53,7 +53,7 @@ namespace ReikaKalseki.Auroresource {
 
 		internal void register() {
 			XMLLocale.LocaleEntry e = AuroresourceMod.locale.getEntry("FallingMaterialSpawner");
-			timerText = e.getField<string>("timer");
+			timerText = e.getString("timer");
 
 			fallingMaterial = new FallingMaterial();
 			fallingMaterial.Patch();

@@ -31,8 +31,8 @@ namespace ReikaKalseki.Auroresource {
 			world.EnsureComponent<PrefabIdentifier>().ClassId = ClassID;
 			StoryHandTarget sh = world.EnsureComponent<StoryHandTarget>();
 			sh.goal = AuroresourceMod.laserCutterJailbroken;
-			sh.primaryTooltip = locale.getField<string>("tooltip");
-			sh.secondaryTooltip = locale.getField<string>("tooltipSecondary");
+			sh.primaryTooltip = locale.getString("tooltip");
+			sh.secondaryTooltip = locale.getString("tooltipSecondary");
 			sh.informGameObject = world;
 			sh.isValidHandTarget = false;
 			world.EnsureComponent<JailbreakingConsoleTag>();
@@ -65,7 +65,7 @@ namespace ReikaKalseki.Auroresource {
 					target.isValidHandTarget = !unlock && held && held.GetComponent<LaserCutter>();// held.GetTechType() == TechType.LaserCutter;
 					target.enabled = target.isValidHandTarget;
 					terminal.enabled = target.enabled;
-					target.secondaryTooltip = target.enabled ? AuroresourceMod.console.locale.getField<string>("tooltipSecondary") : AuroresourceMod.console.locale.getField<string>("tooltipDisabled");
+					target.secondaryTooltip = target.enabled ? AuroresourceMod.console.locale.getString("tooltipSecondary") : AuroresourceMod.console.locale.getString("tooltipDisabled");
 				}
 			}
 

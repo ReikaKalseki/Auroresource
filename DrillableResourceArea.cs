@@ -58,12 +58,12 @@ namespace ReikaKalseki.Auroresource {
 
 		public void updateLocale() {
 			PDAManager.PDAPage page = PDAManager.getPage(locale.pda);
-			page.append("\n\n" + locale.getField<string>("materialListHeader") + "\n");
+			page.append("\n\n" + locale.getString("materialListHeader") + "\n");
 			foreach (TechType tt in drops.getValues()) {
 				page.append(Language.main.strings[tt.AsString(false)] + ": " + (drops.getProbability(tt) * 100).ToString("0.0") + "%\n");
 			}
 			if (InstructionHandlers.getTypeBySimpleName("FCS_ProductionSolutions.Mods.DeepDriller.HeavyDuty.Mono.FCSDeepDrillerOreGenerator") != null)
-				page.append("\n\n" + locale.getField<string>("fcsNote"));
+				page.append("\n\n" + locale.getString("fcsNote"));
 		}
 
 		public List<TechType> getAllAvailableResources() {
@@ -99,8 +99,8 @@ namespace ReikaKalseki.Auroresource {
 				Drillable dr = world.EnsureComponent<Drillable>();
 				dr.Start();
 				dr.health[0] = DURATION;//harvestSpeedMultiplier;
-				dr.primaryTooltip = locale.getField<string>("tooltip");
-				dr.secondaryTooltip = locale.getField<string>("tooltipSecondary");
+				dr.primaryTooltip = locale.getString("tooltip");
+				dr.secondaryTooltip = locale.getString("tooltipSecondary");
 				dr.minResourcesToSpawn = 1;
 				dr.maxResourcesToSpawn = 1;
 				dr.deleteWhenDrilled = false;
