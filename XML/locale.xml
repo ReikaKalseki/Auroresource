@@ -64,6 +64,15 @@
 		<tooltipDisabled>
 			Not holding compatible equipment
 		</tooltipDisabled>
+		<popupTitle>
+			Laser Cutter Upgraded
+		</popupTitle>
+		<popupSubtitle>
+			Firmware Unlocked
+		</popupSubtitle>
+		<popupDescription>
+			Can now harvest directly from the Aurora's hull
+		</popupDescription>
 	</JailBreakConsole>
 	<FallingMaterialSpawner>
 		<name>

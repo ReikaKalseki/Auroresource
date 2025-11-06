@@ -30,7 +30,7 @@ namespace ReikaKalseki.Auroresource {
 		}
 
 		public static void generateItemTooltips(StringBuilder sb, TechType tt, GameObject go) {
-			if (tt == TechType.LaserCutter && Story.StoryGoalManager.main.completedGoals.Contains(AuroresourceMod.laserCutterJailbroken.key)) {
+			if (tt == TechType.LaserCutter && Story.StoryGoalManager.main.completedGoals.Contains(AuroresourceMod.laserCutterJailbroken)) {
 				TooltipFactory.WriteDescription(sb, "\nDevice firmware has been modified to circumvent proscribed usage limitations.");
 			}
 		}
@@ -65,7 +65,7 @@ namespace ReikaKalseki.Auroresource {
 			s._sealed = true;
 			s.maxOpenedAmount = 250 / AuroresourceMod.config.getFloat(ARConfig.ConfigEntries.SPEED); //was 150, comparedto vanilla 100
 			s.openedEvent.AddHandler(ex.gameObject, new UWE.Event<Sealed>.HandleFunction(se => {
-				bool unlock = Story.StoryGoalManager.main.completedGoals.Contains(AuroresourceMod.laserCutterJailbroken.key);
+				bool unlock = Story.StoryGoalManager.main.completedGoals.Contains(AuroresourceMod.laserCutterJailbroken);
 				se.openedAmount = 0;
 				se._sealed = true;
 				if (unlock) {
@@ -77,7 +77,7 @@ namespace ReikaKalseki.Auroresource {
 			GenericHandTarget ht = ex.gameObject.EnsureComponent<GenericHandTarget>();
 			ht.onHandHover = new HandTargetEvent();
 			ht.onHandHover.AddListener(hte => {
-				bool unlock = Story.StoryGoalManager.main.completedGoals.Contains(AuroresourceMod.laserCutterJailbroken.key);
+				bool unlock = Story.StoryGoalManager.main.completedGoals.Contains(AuroresourceMod.laserCutterJailbroken);
 				Pickupable held = Inventory.main.GetHeld();
 				if (unlock) {
 					HandReticle.main.SetProgress(s.GetSealedPercentNormalized());

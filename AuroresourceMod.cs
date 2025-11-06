@@ -41,7 +41,7 @@ namespace ReikaKalseki.Auroresource {
 		public static PrecursorJailbreakingConsole console;
 		public static ScannerRoomMeteorPlanner meteorDetector;
 
-		public static StoryGoal laserCutterJailbroken;
+		public const string laserCutterJailbroken = "lasercutterjailbreak";
 
 		public static TechType detectorUnlock = TechType.BaseMapRoom;
 
@@ -66,12 +66,10 @@ namespace ReikaKalseki.Auroresource {
 			lavaPitCenter = new LavaDome();
 			lavaPitCenter.register(10);
 			console = new PrecursorJailbreakingConsole(locale.getEntry("JailBreakConsole"));
-			console.register();
+			console.register(jailbreakPedestalLocation, 20);
 
 			meteorDetector = new ScannerRoomMeteorPlanner();
 			meteorDetector.Patch();
-
-			laserCutterJailbroken = new StoryGoal("lasercutterjailbreak", Story.GoalType.Story, 0f);
 
 			FallingMaterialSystem.instance.register();
 
@@ -91,7 +89,7 @@ namespace ReikaKalseki.Auroresource {
 			};
 
 			StoryHandler.instance.addListener(s => {
-				if (s == laserCutterJailbroken.key)
+				if (s == laserCutterJailbroken)
 					PDAMessagePrompts.instance.trigger("jailbreak");
 			});
 
